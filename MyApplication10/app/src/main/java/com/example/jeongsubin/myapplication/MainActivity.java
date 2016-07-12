@@ -30,6 +30,9 @@ import java.util.Random;
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
     //LatLng mylocation = new LatLng();
     private GoogleMap googleMap;
+
+    Date date;
+
     Marker marker1;
     Marker marker2;
     Marker marker3;
@@ -48,34 +51,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
         googleMap.setMyLocationEnabled(true);
         LocationManager service = (LocationManager) getSystemService(LOCATION_SERVICE);
-       /* Criteria criteria = new Criteria();
-        if(criteria == null){
-            System.out.println("Subin   criti   NULL!!!!!!!!");
-        }
-        String provider = service.getBestProvider(criteria, false);
-        if(provider == null){
-            System.out.println("Subin   provider   NULL!!!!!!!!");
-        }
-        Location location = service.getLastKnownLocation(provider);
-        if(location == null){
-            System.out.println("Subin   NULL!!!!!!!!");
-        }*/
 
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         String locationProvider = LocationManager.NETWORK_PROVIDER;
         Location location= locationManager.getLastKnownLocation(locationProvider);
-        if(location == null){
-            System.out.println("Subin 12  NULL!!!!!!!!");
-        }
 
         LatLng mylocation = new LatLng(location.getLatitude(), location.getLongitude());
         LatLng mylocation2 = new LatLng(location.getLatitude() + 0.001, location.getLongitude());
         LatLng mylocation3 = new LatLng(location.getLatitude() + 0.002, location.getLongitude());
-        /*LatLng mylocation = new LatLng(1.0, 2.0);
-        LatLng mylocation3 = new LatLng(2.1, 2.0);
-        LatLng mylocation2 = new LatLng(3.2, 2.0);*/
-
 
         marker1 = googleMap.addMarker(new MarkerOptions()
                 .position(mylocation)
@@ -107,9 +91,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         setContentView(R.layout.activity_main);
 
 
+
         long now = System.currentTimeMillis();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", java.util.Locale.getDefault());
-        Date date = new Date(now);
+        date = new Date(now);
         String strDate = dateFormat.format(date);
         TextView text_date = (TextView) findViewById(R.id.date_id);
         text_date.setText(strDate);
@@ -118,7 +103,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         mapFragment.getMapAsync(this);
 
     }
-
 
     public void onClick(View view) {
         switch (view.getId()) {
@@ -170,7 +154,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             case R.id.right_btn:
                 Toast.makeText(this, "Tomorrow", Toast.LENGTH_SHORT).show();
                 break;
-
+            case R.id.haru_main:
+                Toast.makeText(this, "Today", Toast.LENGTH_SHORT).show();
+                break;
         }
     }
 }

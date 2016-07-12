@@ -20,16 +20,20 @@
             android:src="@drawable/left"
             android:background="#ff8c00"/>
         <TextView
+            android:id="@+id/haru_main"
             android:layout_width="220dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:gravity="center"
             android:padding="1dp"
-            android:textAlignment="center"
-            android:textColor="#22b5ff"
-            android:textSize="40dp"
-            android:textStyle="bold"
             android:text="HARU"
-            android:background="#ff8c00"/>
+            android:textColor="#22b5ff"
+            android:textStyle="bold"
+            android:textSize="40sp"
+            android:background="#ff8c00"
+            android:clickable="true"
+            android:onClick="onClick"
+            />
         <ImageButton
             android:id="@+id/right_btn"
             android:layout_width="wrap_content"
