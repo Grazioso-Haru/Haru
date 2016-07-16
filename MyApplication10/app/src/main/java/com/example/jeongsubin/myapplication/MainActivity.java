@@ -35,7 +35,7 @@ import java.util.Random;
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
     //LatLng mylocation = new LatLng();
     private GoogleMap googleMap;
-
+    Marker current_marker;
 
     public void onMapReady(final GoogleMap map) {
         googleMap = map;
@@ -44,8 +44,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         final Animation edit_down = AnimationUtils.loadAnimation(MainActivity.this, R.anim.rise_up);
         final LinearLayout pin_comment = (LinearLayout) findViewById(R.id.pin_comment);
         final ImageButton commit = new ImageButton(MainActivity.this);
+        final ImageButton marker_remover = new ImageButton(MainActivity.this);
         final EditText edit_text = new EditText(MainActivity.this);
-
+        current_marker = null;
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -71,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
                                            @Override
                                            public View getInfoWindow(Marker marker) {
-                                               //Toast.makeText(MainActivity.this, "getinfo", Toast.LENGTH_SHORT).show();
+
                                                return null;
                                            }
 
@@ -79,56 +80,68 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                            public View getInfoContents(final Marker marker) {
                                                Toast.makeText(MainActivity.this, "comment", Toast.LENGTH_SHORT).show();
                                                edit_text.setId(R.id.edit_text);
+                                               if  (marker != current_marker && current_marker !=null){
+                                                   edit_down.setAnimationListener(new AnimationListener());
+                                                   pin_comment.removeView(edit_text);
+                                                   pin_comment.removeView(commit);
+                                                   pin_comment.removeView(marker_remover);
+                                                   pin_comment.startAnimation(edit_down);
+                                               }
                                                if (pin_comment.findViewById(R.id.edit_text) ==null) {
-                                                   edit_text.setLayoutParams(new ViewGroup.LayoutParams(600, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                                   edit_text.setHint("hide");
+                                                   current_marker = marker;
+                                                   edit_text.setLayoutParams(new ViewGroup.LayoutParams(550, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                                   edit_text.setHint("your comment");
                                                    edit_text.setText(marker.getSnippet());
-                                                   //commit.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                                                    commit.setBackgroundResource(R.drawable.right);
                                                    commit.setLayoutParams(new ViewGroup.LayoutParams(50, 50));
+                                                   marker_remover.setBackgroundResource(R.drawable.left);
+                                                   marker_remover.setLayoutParams(new ViewGroup.LayoutParams(50, 50));
 
                                                    pin_comment.addView(edit_text);
                                                    pin_comment.addView(commit);
+                                                   pin_comment.addView(marker_remover);
 
                                                    edit_up.setAnimationListener(new AnimationListener());
                                                    pin_comment.startAnimation(edit_up);
                                                    commit.setOnClickListener(new View.OnClickListener() {
                                                        @Override
                                                        public void onClick(View view) {
-                                                           Toast.makeText(getApplicationContext(),"You click pin",Toast.LENGTH_LONG).show();
+                                                           Toast.makeText(getApplicationContext(),"You click the pin",Toast.LENGTH_LONG).show();
                                                            marker.setSnippet(String.valueOf(edit_text.getText()));
-
                                                            edit_down.setAnimationListener(new AnimationListener());
                                                            pin_comment.removeView(edit_text);
                                                            pin_comment.removeView(commit);
+                                                           pin_comment.removeView(marker_remover);
                                                            pin_comment.startAnimation(edit_down);
+                                                           current_marker = null;
                                                        }
                                                    });
-                                                   return null;
+                                                   marker_remover.setOnClickListener(new View.OnClickListener() {
+                                                       @Override
+                                                       public void onClick(View view) {
+                                                           Toast.makeText(getApplicationContext(),"You remove the pin",Toast.LENGTH_LONG).show();
+                                                           marker.remove();
+                                                           pin_comment.removeView(edit_text);
+                                                           pin_comment.removeView(commit);
+                                                           pin_comment.removeView(marker_remover);
+                                                           pin_comment.startAnimation(edit_down);
+                                                           current_marker = null;
+                                                       }
+                                                   });
                                                }
-                                               googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-                                                   @Override
-                                                   public void onMapClick(LatLng latLng) {
-                                                       edit_down.setAnimationListener(new AnimationListener());
-                                                       pin_comment.removeView(edit_text);
-                                                       pin_comment.removeView(commit);
-                                                       pin_comment.startAnimation(edit_down);
-                                                   }
-                                               });
                                                return null;
                                            }
                                        });
 
                         googleMap.moveCamera(CameraUpdateFactory.newLatLng(mylocation));
-        // ------- //
-        //googleMap.setOnMapLongClickListener((GoogleMap.OnMapLongClickListener)this);
+
     }
     private final class AnimationListener implements
             Animation.AnimationListener{
 
         @Override
         public void onAnimationStart(Animation animation) {
-            //Toast.makeText(getApplicationContext(),"You click pin",Toast.LENGTH_LONG).show();
+
         }
 
         @Override
@@ -162,12 +175,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public void onClick(View view) {
         switch (view.getId()) {
-            /*case R.id.btn:
-                EditText txt = (EditText) findViewById(R.id.text_id);
-                String text = txt.getText().toString();
-                marker1.setSnippet(text);
-                Toast.makeText(this, "1st pushed", Toast.LENGTH_SHORT).show();
-                break;*/
+
             case R.id.make_pin:
                 LocationManager service = (LocationManager) getSystemService(LOCATION_SERVICE);
                 Criteria criteria = new Criteria();
