@@ -50,21 +50,27 @@
     <fragment
         android:id="@+id/map"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="400dp"
         android:onClick="onClick"
         class="com.google.android.gms.maps.MapFragment"/>
-    <Button
-        android:id="@+id/make_pin"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Make Pin"
+        android:orientation="horizontal">
+    <ImageButton
+        android:id="@+id/make_pin"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/button2"
         android:onClick="onClick"
+        android:scaleType="fitXY"
         />
-
     <LinearLayout
         android:id="@+id/pin_comment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
+    </LinearLayout>
     </LinearLayout>
 </LinearLayout>

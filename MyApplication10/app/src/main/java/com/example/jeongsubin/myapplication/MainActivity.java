@@ -89,12 +89,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                                }
                                                if (pin_comment.findViewById(R.id.edit_text) ==null) {
                                                    current_marker = marker;
-                                                   edit_text.setLayoutParams(new ViewGroup.LayoutParams(550, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                                   edit_text.setLayoutParams(new ViewGroup.LayoutParams(520, ViewGroup.LayoutParams.WRAP_CONTENT));
                                                    edit_text.setHint("your comment");
                                                    edit_text.setText(marker.getSnippet());
-                                                   commit.setBackgroundResource(R.drawable.right);
+                                                   commit.setBackgroundResource(R.drawable.commit);
                                                    commit.setLayoutParams(new ViewGroup.LayoutParams(50, 50));
-                                                   marker_remover.setBackgroundResource(R.drawable.left);
+                                                   marker_remover.setBackgroundResource(R.drawable.remove);
                                                    marker_remover.setLayoutParams(new ViewGroup.LayoutParams(50, 50));
 
                                                    pin_comment.addView(edit_text);
