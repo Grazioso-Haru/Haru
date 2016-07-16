@@ -9,7 +9,12 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,14 +36,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     //LatLng mylocation = new LatLng();
     private GoogleMap googleMap;
 
-    Date date;
-
-    Marker marker1;
-    Marker marker2;
-    Marker marker3;
 
     public void onMapReady(final GoogleMap map) {
         googleMap = map;
+
+        final Animation edit_up = AnimationUtils.loadAnimation(MainActivity.this, R.anim.drop_down);
+        final Animation edit_down = AnimationUtils.loadAnimation(MainActivity.this, R.anim.rise_up);
+        final LinearLayout pin_comment = (LinearLayout) findViewById(R.id.pin_comment);
+        final ImageButton commit = new ImageButton(MainActivity.this);
+        final EditText edit_text = new EditText(MainActivity.this);
+
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -50,39 +57,89 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             return;
         }
         googleMap.setMyLocationEnabled(true);
-        LocationManager service = (LocationManager) getSystemService(LOCATION_SERVICE);
 
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         String locationProvider = LocationManager.NETWORK_PROVIDER;
         Location location= locationManager.getLastKnownLocation(locationProvider);
+        if(location == null){
+            System.out.println("Subin 12  NULL!!!!!!!!");
+        }
 
         LatLng mylocation = new LatLng(location.getLatitude(), location.getLongitude());
-        LatLng mylocation2 = new LatLng(location.getLatitude() + 0.001, location.getLongitude());
-        LatLng mylocation3 = new LatLng(location.getLatitude() + 0.002, location.getLongitude());
 
-        marker1 = googleMap.addMarker(new MarkerOptions()
-                .position(mylocation)
-                .draggable(true)
-                .title("the first marker")
-                .snippet("What did you do??")
-                .icon(BitmapDescriptorFactory.defaultMarker(0)));
+        googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+                                           @Override
+                                           public View getInfoWindow(Marker marker) {
+                                               //Toast.makeText(MainActivity.this, "getinfo", Toast.LENGTH_SHORT).show();
+                                               return null;
+                                           }
 
-        marker2 = googleMap.addMarker(new MarkerOptions()
-                .position(mylocation2)
-                .draggable(true)
-                .snippet("What did you do??")
-                .title("the second marker")
-                .icon(BitmapDescriptorFactory.defaultMarker(100)));
-        marker3 = googleMap.addMarker(new MarkerOptions()
-                .position(mylocation3)
-                .draggable(true)
-                .title("the third marker")
-                .snippet("What did you do??")
-                .icon(BitmapDescriptorFactory.defaultMarker(200)));
+                                           @Override
+                                           public View getInfoContents(final Marker marker) {
+                                               Toast.makeText(MainActivity.this, "comment", Toast.LENGTH_SHORT).show();
+                                               edit_text.setId(R.id.edit_text);
+                                               if (pin_comment.findViewById(R.id.edit_text) ==null) {
+                                                   edit_text.setLayoutParams(new ViewGroup.LayoutParams(600, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                                   edit_text.setHint("hide");
+                                                   edit_text.setText(marker.getSnippet());
+                                                   //commit.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                                   commit.setBackgroundResource(R.drawable.right);
+                                                   commit.setLayoutParams(new ViewGroup.LayoutParams(50, 50));
 
+                                                   pin_comment.addView(edit_text);
+                                                   pin_comment.addView(commit);
 
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(mylocation));
+                                                   edit_up.setAnimationListener(new AnimationListener());
+                                                   pin_comment.startAnimation(edit_up);
+                                                   commit.setOnClickListener(new View.OnClickListener() {
+                                                       @Override
+                                                       public void onClick(View view) {
+                                                           Toast.makeText(getApplicationContext(),"You click pin",Toast.LENGTH_LONG).show();
+                                                           marker.setSnippet(String.valueOf(edit_text.getText()));
+
+                                                           edit_down.setAnimationListener(new AnimationListener());
+                                                           pin_comment.removeView(edit_text);
+                                                           pin_comment.removeView(commit);
+                                                           pin_comment.startAnimation(edit_down);
+                                                       }
+                                                   });
+                                                   return null;
+                                               }
+                                               googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                                                   @Override
+                                                   public void onMapClick(LatLng latLng) {
+                                                       edit_down.setAnimationListener(new AnimationListener());
+                                                       pin_comment.removeView(edit_text);
+                                                       pin_comment.removeView(commit);
+                                                       pin_comment.startAnimation(edit_down);
+                                                   }
+                                               });
+                                               return null;
+                                           }
+                                       });
+
+                        googleMap.moveCamera(CameraUpdateFactory.newLatLng(mylocation));
+        // ------- //
+        //googleMap.setOnMapLongClickListener((GoogleMap.OnMapLongClickListener)this);
+    }
+    private final class AnimationListener implements
+            Animation.AnimationListener{
+
+        @Override
+        public void onAnimationStart(Animation animation) {
+            //Toast.makeText(getApplicationContext(),"You click pin",Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        public void onAnimationEnd(Animation animation) {
+
+        }
+
+        @Override
+        public void onAnimationRepeat(Animation animation) {
+
+        }
     }
 
     @Override
@@ -91,10 +148,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         setContentView(R.layout.activity_main);
 
 
-
         long now = System.currentTimeMillis();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", java.util.Locale.getDefault());
-        date = new Date(now);
+        Date date = new Date(now);
         String strDate = dateFormat.format(date);
         TextView text_date = (TextView) findViewById(R.id.date_id);
         text_date.setText(strDate);
@@ -106,24 +162,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.btn:
+            /*case R.id.btn:
                 EditText txt = (EditText) findViewById(R.id.text_id);
                 String text = txt.getText().toString();
                 marker1.setSnippet(text);
                 Toast.makeText(this, "1st pushed", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.btn2:
-                TextView txt2 = (TextView) findViewById(R.id.text_id2);
-                String text2 = txt2.getText().toString();
-                marker2.setSnippet(text2);
-                Toast.makeText(this, "2nd pushed", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.btn3:
-                TextView txt3 = (TextView) findViewById(R.id.text_id3);
-                String text3 = txt3.getText().toString();
-                marker3.setSnippet(text3);
-                Toast.makeText(this, "3rd pushed", Toast.LENGTH_SHORT).show();
-                break;
+                break;*/
             case R.id.make_pin:
                 LocationManager service = (LocationManager) getSystemService(LOCATION_SERVICE);
                 Criteria criteria = new Criteria();
@@ -154,9 +198,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             case R.id.right_btn:
                 Toast.makeText(this, "Tomorrow", Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.haru_main:
-                Toast.makeText(this, "Today", Toast.LENGTH_SHORT).show();
-                break;
+
         }
     }
 }
