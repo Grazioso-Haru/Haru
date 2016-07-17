@@ -1,13 +1,17 @@
 package com.example.jeongsubin.myapplication;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -36,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     //LatLng mylocation = new LatLng();
     private GoogleMap googleMap;
     Marker current_marker;
+    private GestureDetectorCompat gestureDetectorCompat;
 
     public void onMapReady(final GoogleMap map) {
         googleMap = map;
@@ -155,6 +160,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        this.gestureDetectorCompat.onTouchEvent(event);
+        return super.onTouchEvent(event);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -171,6 +182,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        gestureDetectorCompat = new GestureDetectorCompat(this, new MyGestureListener());
     }
 
     public void onClick(View view) {
@@ -207,6 +219,35 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 Toast.makeText(this, "Tomorrow", Toast.LENGTH_SHORT).show();
                 break;
 
+        }
+
+
+    }
+    class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
+        //handle 'swipe left' action only
+
+        @Override
+        public boolean onFling(MotionEvent event1, MotionEvent event2,
+                               float velocityX, float velocityY) {
+
+         /*
+         Toast.makeText(getBaseContext(),
+          event1.toString() + "\n\n" +event2.toString(),
+          Toast.LENGTH_SHORT).show();
+         */
+
+            if(event2.getX() < event1.getX()){
+                Toast.makeText(getBaseContext(),
+                        "Comment",
+                        Toast.LENGTH_SHORT).show();
+
+                //switch another activity
+                Intent intent = new Intent(
+                        MainActivity.this, CommentActivity.class);
+                startActivity(intent);
+            }
+
+            return true;
         }
     }
 }
