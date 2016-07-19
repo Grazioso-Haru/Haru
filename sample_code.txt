@@ -1,0 +1,864 @@
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,000000)
+insertValues.put(LONG, -122.053356)
+insertValues.put(LAT, 36.998626)
+insertValues.put(COLOR,'0x37c3f340')//1
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,001000)
+insertValues.put(LONG, -112.052607)
+insertValues.put(LAT, 36.998619)
+insertValues.put(COLOR,'0x32b1f9e9')//2
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,002000)
+insertValues.put(LONG, -112.052607)
+insertValues.put(LAT, 37.00000)
+insertValues.put(COLOR,'0x52ce4b01')//3
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,003000)
+insertValues.put(LONG, -122.053248)
+insertValues.put(LAT, 37.00000)
+insertValues.put(COLOR,'0x810038bd')//4
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,004000)
+insertValues.put(LONG, -122.054234)
+insertValues.put(LAT, 36.99543)
+insertValues.put(COLOR,'0xbabf3620')//5
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,005000)
+insertValues.put(LONG, -122.054889)
+insertValues.put(LAT, 36.998789)
+insertValues.put(COLOR,'0xc8842cbf')//6
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,010000)
+insertValues.put(LONG, -122.055207)
+insertValues.put(LAT, 36.99822)
+insertValues.put(COLOR,'0x601079be')//7
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,011000)
+insertValues.put(LONG, -122.055291)
+insertValues.put(LAT, 36.997243)
+insertValues.put(COLOR,'0x4678846b')//8
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,012000)
+insertValues.put(LONG, -122.055239)
+insertValues.put(LAT, 36.996184)
+insertValues.put(COLOR,'0x80f202a1')//9
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,013000)
+insertValues.put(LONG, -122.055495)
+insertValues.put(LAT, 36.995245)
+insertValues.put(COLOR,'0x9152fdf9')//10
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,014000)
+insertValues.put(LONG, -122.055669)
+insertValues.put(LAT, 36.994377)
+insertValues.put(COLOR,'0x3865a2b8')//11
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,015000)
+insertValues.put(LONG, -122.055426)
+insertValues.put(LAT, 36.993824)
+insertValues.put(COLOR,'0x54e60aeb')//12
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,020000)
+insertValues.put(LONG, -122.055163)
+insertValues.put(LAT, 26.993007)
+insertValues.put(COLOR,'0x9f58982f')//13
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,021000)
+insertValues.put(LONG, -122.055120)
+insertValues.put(LAT, 36.992146)
+insertValues.put(COLOR,'0x3cf788dd')//14
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,022000)
+insertValues.put(LONG, -122.054789)
+insertValues.put(LAT, 36.991320)
+insertValues.put(COLOR,'0x28382796')//15
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,023000)
+insertValues.put(LONG, -122.054838)
+insertValues.put(LAT, 36.991553)
+insertValues.put(COLOR,'0xe464b81a')//16
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,024000)
+insertValues.put(LONG, -122.054690)
+insertValues.put(LAT, 36.991046)
+insertValues.put(COLOR,'0xbbc2b290')//17
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,025000)
+insertValues.put(LONG, -122.054690)
+insertValues.put(LAT, 36.991046)
+insertValues.put(COLOR,'0xdf2cc9fe')//18
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,030000)
+insertValues.put(LONG, -122.054838)
+insertValues.put(LAT, 36.991553)
+insertValues.put(COLOR,'0x42c00f81')//19
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,031000)
+insertValues.put(LONG, -122.055596)
+insertValues.put(LAT, 36.994359)
+insertValues.put(COLOR,'0x260fc31c')//20
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,032000)
+insertValues.put(LONG, -122.055131)
+insertValues.put(LAT, 36.994638)
+insertValues.put(COLOR,'0xbbe36949')//21
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,033000)
+insertValues.put(LONG, -122.055119)
+insertValues.put(LAT, 36.994415)
+insertValues.put(COLOR,'0x198378b6')//22
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,034000)
+insertValues.put(LONG, -122.055119)
+insertValues.put(LAT, 36.994415)
+insertValues.put(COLOR,'0x27859257')//23
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,035000)
+insertValues.put(LONG, -122.055119)
+insertValues.put(LAT, 36.994415)
+insertValues.put(COLOR,'0xbdd68e1d')//24
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,040000)
+insertValues.put(LONG, -122.055119)
+insertValues.put(LAT, 36.994415)
+insertValues.put(COLOR,'0xb044cb56')//25
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,041000)
+insertValues.put(LONG, -122.055119)
+insertValues.put(LAT, 36.994415)
+insertValues.put(COLOR,'0xd2c4c72e')//26
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,042000)
+insertValues.put(LONG, -122.055119)
+insertValues.put(LAT, 36.994415)
+insertValues.put(COLOR,'0xee42bce0')//27
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,043000)
+insertValues.put(LONG, -122.055119)
+insertValues.put(LAT, 36.994415)
+insertValues.put(COLOR,'0xfe998b2d')//28
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,044000)
+insertValues.put(LONG, -122.055119)
+insertValues.put(LAT, 36.994415)
+insertValues.put(COLOR,'0xd3e16921')//29
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,045000)
+insertValues.put(LONG, -122.055119)
+insertValues.put(LAT, 36.994415)
+insertValues.put(COLOR,'0x198c30d3')//30
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,050000)
+insertValues.put(LONG, -122.055119)
+insertValues.put(LAT, 36.994415)
+insertValues.put(COLOR,'0xf9f4196a')//31
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,051000)
+insertValues.put(LONG, -122.055596)
+insertValues.put(LAT, 36.994823)
+insertValues.put(COLOR,'0xe901cfcd')//32
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,052000)
+insertValues.put(LONG, -122.055468)
+insertValues.put(LAT, 36.995269)
+insertValues.put(COLOR,'0x173d0c84')//33
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,053000)
+insertValues.put(LONG, -122.055468)
+insertValues.put(LAT, 36.995269)
+insertValues.put(COLOR,'0xaa368bca')//34
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,054000)
+insertValues.put(LONG, -122.05263)
+insertValues.put(LAT, 36.996117)
+insertValues.put(COLOR,'0x8608205d')//35
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,055000)
+insertValues.put(LONG, -122.054928)
+insertValues.put(LAT, 36.996330)
+insertValues.put(COLOR,'0xd6f5ee92')//36
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,060000)
+insertValues.put(LONG, -122.054499)
+insertValues.put(LAT, 36.996308)
+insertValues.put(COLOR,'0xec4a70d2')//37
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,061000)
+insertValues.put(LONG, -122.03967)
+insertValues.put(LAT, 36.997103)
+insertValues.put(COLOR,'0x53d407bd')//38
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,062000)
+insertValues.put(LONG, -122.03967)
+insertValues.put(LAT, 36.997103)
+insertValues.put(COLOR,'0xf69fb690')//39
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,063000)
+insertValues.put(LONG, -122.053633)
+insertValues.put(LAT, 36.996893)
+insertValues.put(COLOR,'0x41ac91')//40
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,064000)
+insertValues.put(LONG, -122.053633)
+insertValues.put(LAT, 36.996893)
+insertValues.put(COLOR,'0x39766014')//41
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,065000)
+insertValues.put(LONG, -122.053633)
+insertValues.put(LAT, 36.996893)
+insertValues.put(COLOR,'0x372f17a9')//42
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,070000)
+insertValues.put(LONG, -122.053633)
+insertValues.put(LAT, 36.996893)
+insertValues.put(COLOR,'0xeafd5b1a')//43
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,071000)
+insertValues.put(LONG, -122.053633)
+insertValues.put(LAT, 36.996893)
+insertValues.put(COLOR,'0xe4f5d822')//44
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,072000)
+insertValues.put(LONG, -122.053633)
+insertValues.put(LAT, 36.996893)
+insertValues.put(COLOR,'0x558af60f')//45
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,073000)
+insertValues.put(LONG, -122.053633)
+insertValues.put(LAT, 36.996893)
+insertValues.put(COLOR,'0x89ed4e94')//46
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,074000)
+insertValues.put(LONG, -122.053633)
+insertValues.put(LAT, 36.996893)
+insertValues.put(COLOR,'0x52ae3ba9')//47
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,075000)
+insertValues.put(LONG, -122.053633)
+insertValues.put(LAT, 36.996893)
+insertValues.put(COLOR,'0xc431cc51')//48
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,080000)
+insertValues.put(LONG, -122.053633)
+insertValues.put(LAT, 36.996893)
+insertValues.put(COLOR,'0x4099e2d7')//49
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,081000)
+insertValues.put(LONG, -122.053633)
+insertValues.put(LAT, 36.996893)
+insertValues.put(COLOR,'0xbdd9ecfa')//50
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,082000)
+insertValues.put(LONG, -122.053633)
+insertValues.put(LAT, 36.996893)
+insertValues.put(COLOR,'0x1c7c6773')//51
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,083000)
+insertValues.put(LONG, -122.053633)
+insertValues.put(LAT, 36.996893)
+insertValues.put(COLOR,'0xa6e637d2')//52
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,084000)
+insertValues.put(LONG, -122.053633)
+insertValues.put(LAT, 36.996893)
+insertValues.put(COLOR,'0x27030951')//53
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,085000)
+insertValues.put(LONG, -122.053633)
+insertValues.put(LAT, 36.996893)
+insertValues.put(COLOR,'0xced2deaf')//54
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,090000)
+insertValues.put(LONG, -122.053633)
+insertValues.put(LAT, 36.996893)
+insertValues.put(COLOR,'0x5c782d11')//55
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,091000)
+insertValues.put(LONG, -122.053633)
+insertValues.put(LAT, 36.996893)
+insertValues.put(COLOR,'0x6c0c4913')//56
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,092000)
+insertValues.put(LONG, -122.053633)
+insertValues.put(LAT, 36.996893)
+insertValues.put(COLOR,'0xf091d288')//57
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,093000)
+insertValues.put(LONG, -122.053633)
+insertValues.put(LAT, 36.996893)
+insertValues.put(COLOR,'0xedc22c4a')//58
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,094000)
+insertValues.put(LONG, -122.053633)
+insertValues.put(LAT, 36.996893)
+insertValues.put(COLOR,'0x9aae098c')//59
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,095000)
+insertValues.put(LONG, -122.053633)
+insertValues.put(LAT, 36.996893)
+insertValues.put(COLOR,'0x7c3e066f')//60
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,100000)
+insertValues.put(LONG, -122.053633)
+insertValues.put(LAT, 36.996893)
+insertValues.put(COLOR,'0xd4d0c53c')//61
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,101000)
+insertValues.put(LONG, -122.053633)
+insertValues.put(LAT, 36.996893)
+insertValues.put(COLOR,'0xa1f57c36')//62
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,102000)
+insertValues.put(LONG, -122.053633)
+insertValues.put(LAT, 36.996893)
+insertValues.put(COLOR,'0x2b3ba28b')//63
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,103000)
+insertValues.put(LONG,-122.053672)
+insertValues.put(LAT, 36.997078)
+insertValues.put(COLOR,'0xba0269c2')//64
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,104000)
+insertValues.put(LONG,-122.053672)
+insertValues.put(LAT, 36.997078)
+insertValues.put(COLOR,'0xe097bd1e')//65
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,105000)
+insertValues.put(LONG,-122.053112)
+insertValues.put(LAT, 36.997109)
+insertValues.put(COLOR,'0x31764a64')//66
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,110000)
+insertValues.put(LONG,-122.053112)
+insertValues.put(LAT, 36.997109)
+insertValues.put(COLOR,'0x19532a00')//67
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,111000)
+insertValues.put(LONG,-122.053112)
+insertValues.put(LAT, 36.997109)
+insertValues.put(COLOR,'0x7f3f62b8')//68
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,112000)
+insertValues.put(LONG,-122.053112)
+insertValues.put(LAT, 36.997109)
+insertValues.put(COLOR,'0xa00e2907')//69
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,113000)
+insertValues.put(LONG,-122.053112)
+insertValues.put(LAT, 36.997109)
+insertValues.put(COLOR,'0xf43a9e29')//70
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,114000)
+insertValues.put(LONG,-122.053112)
+insertValues.put(LAT, 36.997109)
+insertValues.put(COLOR,'0x5aa38b22')//71
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,115000)
+insertValues.put(LONG,-122.054338)
+insertValues.put(LAT, 36.997611)
+insertValues.put(COLOR,'0x77be9b19')//72
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,120000)
+insertValues.put(LONG,-122.0543590)
+insertValues.put(LAT, 35.998150)
+insertValues.put(COLOR,'0x30dc50e2')//73
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,121000)
+insertValues.put(LONG,-122.054543)
+insertValues.put(LAT, 36.998564)
+insertValues.put(COLOR,'0x249e8db1')//74
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,122000)
+insertValues.put(LONG,-122.054543)
+insertValues.put(LAT, 36.998564)
+insertValues.put(COLOR,'0x4231396')//75
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,123000)
+insertValues.put(LONG,-122.054543)
+insertValues.put(LAT, 36.998564)
+insertValues.put(COLOR,'0xdfdf1b1b')//76
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,124000)
+insertValues.put(LONG,-122.053817)
+insertValues.put(LAT, 36.998654)
+insertValues.put(COLOR,'0x775efdce')//77
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,125000)
+insertValues.put(LONG,-122.053365)
+insertValues.put(LAT, 36.998707)
+insertValues.put(COLOR,'0x772484b9')//78
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,130000)
+insertValues.put(LONG,-122.053365)
+insertValues.put(LAT, 36.998707)
+insertValues.put(COLOR,'0x2a73f2ee')//79
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,131000)
+insertValues.put(LONG,-122.054091)
+insertValues.put(LAT, 36.999098)
+insertValues.put(COLOR,'0xdb9ed54a')//80
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,132000)
+insertValues.put(LONG,-122.052299)
+insertValues.put(LAT, 36.999426)
+insertValues.put(COLOR,'0xf01854f6')//81
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,133000)
+insertValues.put(LONG,-122.053303)
+insertValues.put(LAT, 36.999643)
+insertValues.put(COLOR,'0x30a93fa2')//82
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,134000)
+insertValues.put(LONG,-122.053303)
+insertValues.put(LAT, 36.999643)
+insertValues.put(COLOR,'0xddc75aa5')//83
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,135000)
+insertValues.put(LONG,-122.053303)
+insertValues.put(LAT, 36.999643)
+insertValues.put(COLOR,'0x616ea21e')//84
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,140000)
+insertValues.put(LONG,-122.053796)
+insertValues.put(LAT, 36.99935)
+insertValues.put(COLOR,'0xfd4de3dc')//85
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,141000)
+insertValues.put(LONG,-122.053796)
+insertValues.put(LAT, 36.99935)
+insertValues.put(COLOR,'0x3d7a5223')//86
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,142000)
+insertValues.put(LONG,-122.053796)
+insertValues.put(LAT, 36.99935)
+insertValues.put(COLOR,'0xa969d611')//87
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,143000)
+insertValues.put(LONG,-122.053796)
+insertValues.put(LAT, 36.99935)
+insertValues.put(COLOR,'0xbd10adf')//88
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,144000)
+insertValues.put(LONG,-122.053796)
+insertValues.put(LAT, 36.99935)
+insertValues.put(COLOR,'0x877dd03')//89
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,145000)
+insertValues.put(LONG,-112.054262)
+insertValues.put(LAT, 37.000120)
+insertValues.put(COLOR,'0xdcfa6e5f')//90
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,150000)
+insertValues.put(LONG,-112.054262)
+insertValues.put(LAT, 37.000120)
+insertValues.put(COLOR,'0x664c5db7')//91
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,151000)
+insertValues.put(LONG,-112.054262)
+insertValues.put(LAT, 37.000120)
+insertValues.put(COLOR,'0x31b88702')//92
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,152000)
+insertValues.put(LONG,-112.054262)
+insertValues.put(LAT, 37.000120)
+insertValues.put(COLOR,'0x2367d75f')//93
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,153000)
+insertValues.put(LONG,-112.054262)
+insertValues.put(LAT, 37.000120)
+insertValues.put(COLOR,'0x6ae424db')//94
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,154000)
+insertValues.put(LONG,-112.054262)
+insertValues.put(LAT, 37.000120)
+insertValues.put(COLOR,'0xc52463c1')//95
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,155000)
+insertValues.put(LONG,-122.054908)
+insertValues.put(LAT, 37.000600)
+insertValues.put(COLOR,'0xdcbcb37f')//96
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,160000)
+insertValues.put(LONG,-122.054526)
+insertValues.put(LAT, 37.001448)
+insertValues.put(COLOR,'0xd88675')//97
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,161000)
+insertValues.put(LONG,-122.054963)
+insertValues.put(LAT, 37.002046)
+insertValues.put(COLOR,'0x31c93703')//98
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,162000)
+insertValues.put(LONG,-122.053828)
+insertValues.put(LAT, 37.001859)
+insertValues.put(COLOR,'0x5ecf4ae3')//99
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,163000)
+insertValues.put(LONG,-122.053828)
+insertValues.put(LAT, 37.001859)
+insertValues.put(COLOR,'0x86e0e903')//100
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,164000)
+insertValues.put(LONG,-122.053111)
+insertValues.put(LAT, 37.001975)
+insertValues.put(COLOR,'0x2239f5a8')//101
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,165000)
+insertValues.put(LONG,-122.052943)
+insertValues.put(LAT, 37.001814)
+insertValues.put(COLOR,'0x39ff9426')//102
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,170000)
+insertValues.put(LONG,-122.052943)
+insertValues.put(LAT, 37.001814)
+insertValues.put(COLOR,'0x259258bf')//103
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,171000)
+insertValues.put(LONG,-122.052943)
+insertValues.put(LAT, 37.001814)
+insertValues.put(COLOR,'0xf58b83f8')//104
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,172000)
+insertValues.put(LONG,-122.053253)
+insertValues.put(LAT, 37.001883)
+insertValues.put(COLOR,'0xd69108b3')//105
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,173000)
+insertValues.put(LONG,-122.053253)
+insertValues.put(LAT, 37.001883)
+insertValues.put(COLOR,'0x5868fccc')//106
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,174000)
+insertValues.put(LONG,-122.057562)
+insertValues.put(LAT, 37.001535)
+insertValues.put(COLOR,'0xdb04ad5a')//107
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,175000)
+insertValues.put(LONG,-122.057562)
+insertValues.put(LAT, 37.001535)
+insertValues.put(COLOR,'0x74f82f6')//108
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,180000)
+insertValues.put(LONG,-122.057562)
+insertValues.put(LAT, 37.001535)
+insertValues.put(COLOR,'0x97d5371d')//109
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,181000)
+insertValues.put(LONG,-122.057405)
+insertValues.put(LAT, 37.001042)
+insertValues.put(COLOR,'0x78917736')//110
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,182000)
+insertValues.put(LONG,-122.057405)
+insertValues.put(LAT, 37.001042)
+insertValues.put(COLOR,'0x3084eab5')//111
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,183000)
+insertValues.put(LONG,-122.057336)
+insertValues.put(LAT, 37.000643)
+insertValues.put(COLOR,'0x8326584c')//112
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,184000)
+insertValues.put(LONG,-122.057129)
+insertValues.put(LAT, 37.000157)
+insertValues.put(COLOR,'0x366dd18f')//113
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,185000)
+insertValues.put(LONG,-122.057563)
+insertValues.put(LAT, 36.999690)
+insertValues.put(COLOR,'0x27f0af2')//114
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,190000)
+insertValues.put(LONG,-122.057563)
+insertValues.put(LAT, 36.999690)
+insertValues.put(COLOR,'0x39f17819')//115
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,191000)
+insertValues.put(LONG,-122.057563)
+insertValues.put(LAT, 36.999690)
+insertValues.put(COLOR,'0x2faea763')//116
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,192000)
+insertValues.put(LONG,-122.057563)
+insertValues.put(LAT, 36.999690)
+insertValues.put(COLOR,'0x4be9ceb9')//117
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,193000)
+insertValues.put(LONG,-122.057563)
+insertValues.put(LAT, 36.999690)
+insertValues.put(COLOR,'0xd1f7409a')//118
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,194000)
+insertValues.put(LONG,-122.057563)
+insertValues.put(LAT, 36.999690)
+insertValues.put(COLOR,'0xfcb920f8')//119
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,195000)
+insertValues.put(LONG,-122.057563)
+insertValues.put(LAT, 36.999690)
+insertValues.put(COLOR,'0x57f7e24b')//120
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,200000)
+insertValues.put(LONG,-122.057563)
+insertValues.put(LAT, 36.999690)
+insertValues.put(COLOR,'0xef83aa35')//121
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,201000)
+insertValues.put(LONG,-122.058733)
+insertValues.put(LAT, 36.999783)
+insertValues.put(COLOR,'0xe7a4b8d2')//122
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,202000)
+insertValues.put(LONG,-122.058733)
+insertValues.put(LAT, 36.999783)
+insertValues.put(COLOR,'0x95a3c172')//123
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,203000)
+insertValues.put(LONG,-122.058733)
+insertValues.put(LAT, 36.999783)
+insertValues.put(COLOR,'0x3f601b49')//124
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,204000)
+insertValues.put(LONG,-122.060053)
+insertValues.put(LAT, 37.0000090)
+insertValues.put(COLOR,'0x909e7170')//125
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,205000)
+insertValues.put(LONG,-122.060713)
+insertValues.put(LAT, 37.000170)
+insertValues.put(COLOR,'0x41fb48da')//126
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,210000)
+insertValues.put(LONG,-122.060525)
+insertValues.put(LAT, 36.999440)
+insertValues.put(COLOR,'0x8fb73fd1')//127
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,211000)
+insertValues.put(LONG,-122.060801)
+insertValues.put(LAT, 36.999149)
+insertValues.put(COLOR,'0x3789570f')//128
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,212000)
+insertValues.put(LONG,-122.060801)
+insertValues.put(LAT, 36.999149)
+insertValues.put(COLOR,'0x5341d8fb')//129
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,213000)
+insertValues.put(LONG,-122.060801)
+insertValues.put(LAT, 36.999149)
+insertValues.put(COLOR,'0xc3a34705')//130
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,214000)
+insertValues.put(LONG,-122.060801)
+insertValues.put(LAT, 36.999149)
+insertValues.put(COLOR,'0xeda0b7e3')//131
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,215000)
+insertValues.put(LONG,-122.060801)
+insertValues.put(LAT, 36.999149)
+insertValues.put(COLOR,'0xe1f1915d')//132
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,220000)
+insertValues.put(LONG,-122.060801)
+insertValues.put(LAT, 36.999149)
+insertValues.put(COLOR,'0xba0b1075')//133
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,221000)
+insertValues.put(LONG,-122.060801)
+insertValues.put(LAT, 36.999149)
+insertValues.put(COLOR,'0xb368cff6')//134
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,222000)
+insertValues.put(LONG,-122.060801)
+insertValues.put(LAT, 36.999149)
+insertValues.put(COLOR,'0xb3d799ae')//135
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,223000)
+insertValues.put(LONG,-122.060801)
+insertValues.put(LAT, 36.999149)
+insertValues.put(COLOR,'0x610cf0f8')//136
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,224000)
+insertValues.put(LONG,-122.060801)
+insertValues.put(LAT, 36.999149)
+insertValues.put(COLOR,'0x1349db6b')//137
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,225000)
+insertValues.put(LONG,-112.061616)
+insertValues.put(LAT, 36.999403)
+insertValues.put(COLOR,'0xa9264c68')//138
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,230000)
+insertValues.put(LONG,-112.061616)
+insertValues.put(LAT, 36.999403)
+insertValues.put(COLOR,'0xc9501268')//139
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,231000)
+insertValues.put(LONG,-112.061616)
+insertValues.put(LAT, 36.999403)
+insertValues.put(COLOR,'0x8cde6de1')//140
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,232000)
+insertValues.put(LONG,-112.061616)
+insertValues.put(LAT, 36.999403)
+insertValues.put(COLOR,'0xe62bb626')//141
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,233000)
+insertValues.put(LONG,-122.06132)
+insertValues.put(LAT, 36.999967)
+insertValues.put(COLOR,'0x8dbe42e0')//142
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,234000)
+insertValues.put(LONG,-122.06132)
+insertValues.put(LAT, 36.999967)
+insertValues.put(COLOR,'0xe5f754d0')//143
+
+insertValues.put(DATE, 20170718)
+insertValues.put(TIME,235000)
+insertValues.put(LONG,-122.06132)
+insertValues.put(LAT, 36.999967)
+insertValues.put(COLOR,'0x117d209f')//144
+
