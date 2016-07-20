@@ -1,7 +1,6 @@
 package com.example.jeongsubin.myapplication;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -10,17 +9,19 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GestureDetectorCompat;
+import android.support.v4.widget.SlidingPaneLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,8 +45,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     Marker current_marker;
     private GestureDetectorCompat gestureDetectorCompat;
     SQLiteDatabase db;
-    String s="";
+    String s = "";
     TextView textview;
+    ListView listview;
+    String[] commList={};
+
     public void onMapReady(final GoogleMap map) {
         googleMap = map;
 
@@ -56,26 +60,34 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         final ImageButton marker_remover = new ImageButton(MainActivity.this);
         final EditText edit_text = new EditText(MainActivity.this);
         textview = (TextView) findViewById(R.id.text_id);
-        db = openOrCreateDatabase("Haru", MODE_PRIVATE,null);
+        db = openOrCreateDatabase("Haru", MODE_PRIVATE, null);
 
         current_marker = null;
 
-        try{
+        try {
+            db.execSQL("delete table Haru_comment");
             db.execSQL("create table Haru_comment(date TEXT, comment TEXT);");
             //db.execSQL("create table Haru_test(date integer, comment integer);");
+        } catch (Exception e) {
         }
-        catch (Exception e){
-        }
-        db.execSQL("insert into Haru_comment values('20160718', '22222');");
+        //db.execSQL("insert into Haru_comment values('20140478', 'This is my KAIST student ID. I want to check what happens when the comment is too long.');");
         String sql = "select * from Haru_comment";
         Cursor result = db.rawQuery(sql, null);
         result.moveToFirst();
-        while(!result.isAfterLast()){
-            s = s + result.getString(0)+ ' ' + result.getString(1);
+        int i=0;
+        for (int j=0;j<50;j++) {
+            if (commList[j]==null)
+                commList[j] = "";
+        }
+        while (!result.isAfterLast()) {
+            s = result.getString(0) + ' ' + result.getString(1);
+            commList[i]=s;
+            i++;
             result.moveToNext();
         }
+
         result.close();
-        textview.setText(s);
+        //textview.setText(s);
 
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -92,82 +104,83 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         String locationProvider = LocationManager.NETWORK_PROVIDER;
-        Location location= locationManager.getLastKnownLocation(locationProvider);
-        if(location == null){
+        Location location = locationManager.getLastKnownLocation(locationProvider);
+        if (location == null) {
             System.out.println("Subin 12  NULL!!!!!!!!");
         }
 
         LatLng mylocation = new LatLng(location.getLatitude(), location.getLongitude());
 
         googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
-                                           @Override
-                                           public View getInfoWindow(Marker marker) {
+            @Override
+            public View getInfoWindow(Marker marker) {
 
-                                               return null;
-                                           }
+                return null;
+            }
 
-                                           @Override
-                                           public View getInfoContents(final Marker marker) {
-                                               Toast.makeText(MainActivity.this, "comment", Toast.LENGTH_SHORT).show();
-                                               edit_text.setId(R.id.edit_text);
-                                               if  (marker != current_marker && current_marker !=null){
-                                                   edit_down.setAnimationListener(new AnimationListener());
-                                                   pin_comment.removeView(edit_text);
-                                                   pin_comment.removeView(commit);
-                                                   pin_comment.removeView(marker_remover);
-                                                   pin_comment.startAnimation(edit_down);
-                                               }
-                                               if (pin_comment.findViewById(R.id.edit_text) ==null) {
-                                                   current_marker = marker;
-                                                   edit_text.setLayoutParams(new ViewGroup.LayoutParams(520, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                                   edit_text.setHint("your comment");
-                                                   edit_text.setText(marker.getSnippet());
-                                                   commit.setBackgroundResource(R.drawable.commit);
-                                                   commit.setLayoutParams(new ViewGroup.LayoutParams(50, 50));
-                                                   marker_remover.setBackgroundResource(R.drawable.remove);
-                                                   marker_remover.setLayoutParams(new ViewGroup.LayoutParams(50, 50));
+            @Override
+            public View getInfoContents(final Marker marker) {
+                Toast.makeText(MainActivity.this, "comment", Toast.LENGTH_SHORT).show();
+                edit_text.setId(R.id.edit_text);
+                if (marker != current_marker && current_marker != null) {
+                    edit_down.setAnimationListener(new AnimationListener());
+                    pin_comment.removeView(edit_text);
+                    pin_comment.removeView(commit);
+                    pin_comment.removeView(marker_remover);
+                    pin_comment.startAnimation(edit_down);
+                }
+                if (pin_comment.findViewById(R.id.edit_text) == null) {
+                    current_marker = marker;
+                    edit_text.setLayoutParams(new ViewGroup.LayoutParams(520, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    edit_text.setHint("your comment");
+                    edit_text.setText(marker.getSnippet());
+                    commit.setBackgroundResource(R.drawable.commit);
+                    commit.setLayoutParams(new ViewGroup.LayoutParams(50, 50));
+                    marker_remover.setBackgroundResource(R.drawable.remove);
+                    marker_remover.setLayoutParams(new ViewGroup.LayoutParams(50, 50));
 
-                                                   pin_comment.addView(edit_text);
-                                                   pin_comment.addView(commit);
-                                                   pin_comment.addView(marker_remover);
+                    pin_comment.addView(edit_text);
+                    pin_comment.addView(commit);
+                    pin_comment.addView(marker_remover);
 
-                                                   edit_up.setAnimationListener(new AnimationListener());
-                                                   pin_comment.startAnimation(edit_up);
-                                                   commit.setOnClickListener(new View.OnClickListener() {
-                                                       @Override
-                                                       public void onClick(View view) {
-                                                           Toast.makeText(getApplicationContext(),"You click the pin",Toast.LENGTH_LONG).show();
-                                                           marker.setSnippet(String.valueOf(edit_text.getText()));
-                                                           edit_down.setAnimationListener(new AnimationListener());
-                                                           pin_comment.removeView(edit_text);
-                                                           pin_comment.removeView(commit);
-                                                           pin_comment.removeView(marker_remover);
-                                                           pin_comment.startAnimation(edit_down);
-                                                           current_marker = null;
-                                                       }
-                                                   });
-                                                   marker_remover.setOnClickListener(new View.OnClickListener() {
-                                                       @Override
-                                                       public void onClick(View view) {
-                                                           Toast.makeText(getApplicationContext(),"You remove the pin",Toast.LENGTH_LONG).show();
-                                                           marker.remove();
-                                                           pin_comment.removeView(edit_text);
-                                                           pin_comment.removeView(commit);
-                                                           pin_comment.removeView(marker_remover);
-                                                           pin_comment.startAnimation(edit_down);
-                                                           current_marker = null;
-                                                       }
-                                                   });
-                                               }
-                                               return null;
-                                           }
-                                       });
+                    edit_up.setAnimationListener(new AnimationListener());
+                    pin_comment.startAnimation(edit_up);
+                    commit.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Toast.makeText(getApplicationContext(), "You click the pin", Toast.LENGTH_LONG).show();
+                            marker.setSnippet(String.valueOf(edit_text.getText()));
+                            edit_down.setAnimationListener(new AnimationListener());
+                            pin_comment.removeView(edit_text);
+                            pin_comment.removeView(commit);
+                            pin_comment.removeView(marker_remover);
+                            pin_comment.startAnimation(edit_down);
+                            current_marker = null;
+                        }
+                    });
+                    marker_remover.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Toast.makeText(getApplicationContext(), "You remove the pin", Toast.LENGTH_LONG).show();
+                            marker.remove();
+                            pin_comment.removeView(edit_text);
+                            pin_comment.removeView(commit);
+                            pin_comment.removeView(marker_remover);
+                            pin_comment.startAnimation(edit_down);
+                            current_marker = null;
+                        }
+                    });
+                }
+                return null;
+            }
+        });
 
-                        googleMap.moveCamera(CameraUpdateFactory.newLatLng(mylocation));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(mylocation));
 
     }
+
     private final class AnimationListener implements
-            Animation.AnimationListener{
+            Animation.AnimationListener {
 
         @Override
         public void onAnimationStart(Animation animation) {
@@ -185,16 +198,18 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        this.gestureDetectorCompat.onTouchEvent(event);
-        return super.onTouchEvent(event);
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        SlidingPaneLayout slidingPaneLayout = (SlidingPaneLayout) findViewById(R.id.SlidingPanel);
+        slidingPaneLayout.setSliderFadeColor(ContextCompat.getColor(this, android.R.color.transparent));
+
+        //Setting arrays to see
+        listview = (ListView) findViewById(R.id.comment_list);
+        commList= new String[50];
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, commList);
+        listview.setAdapter(adapter);
 
 
         long now = System.currentTimeMillis();
@@ -207,7 +222,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        gestureDetectorCompat = new GestureDetectorCompat(this, new MyGestureListener());
     }
 
     public void onClick(View view) {
@@ -228,8 +242,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     return;
                 }
                 Location location = service.getLastKnownLocation(provider);
-                LatLng mylocation = new LatLng(location.getLatitude(),location.getLongitude());
-                Random r= new Random();
+                LatLng mylocation = new LatLng(location.getLatitude(), location.getLongitude());
+                Random r = new Random();
                 googleMap.addMarker(new MarkerOptions()
                         .position(mylocation)
                         .draggable(true)
@@ -247,32 +261,5 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
 
 
-    }
-    class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
-        //handle 'swipe left' action only
-
-        @Override
-        public boolean onFling(MotionEvent event1, MotionEvent event2,
-                               float velocityX, float velocityY) {
-
-         /*
-         Toast.makeText(getBaseContext(),
-          event1.toString() + "\n\n" +event2.toString(),
-          Toast.LENGTH_SHORT).show();
-         */
-
-            if(event2.getX() < event1.getX()){
-                Toast.makeText(getBaseContext(),
-                        "Comment",
-                        Toast.LENGTH_SHORT).show();
-
-                //switch another activity
-                Intent intent = new Intent(
-                        MainActivity.this, CommentActivity.class);
-                startActivity(intent);
-            }
-
-            return true;
-        }
     }
 }
