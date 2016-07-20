@@ -63,14 +63,25 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         db = openOrCreateDatabase("Haru", MODE_PRIVATE, null);
 
         current_marker = null;
+        try{
+            db.execSQL("drop table Haru_comment"); //always delete existed Haru_comment table
+        }
+        catch (Exception e){
+            System.out.println("Hello! There is no Haru_comment table.");
+        }
 
         try {
-            db.execSQL("delete table Haru_comment");
-            db.execSQL("create table Haru_comment(date TEXT, comment TEXT);");
-            //db.execSQL("create table Haru_test(date integer, comment integer);");
+            db.execSQL("create table Haru_comment(date TEXT, comment TEXT);");//always create a new table named Haru_commnet
         } catch (Exception e) {
+            System.out.println("Hello! Already Haru_comment table exists.");
         }
-        //db.execSQL("insert into Haru_comment values('20140478', 'This is my KAIST student ID. I want to check what happens when the comment is too long.');");
+        //sample DB data
+        db.execSQL("insert into Haru_comment values('20160713', 'Hello');");
+        db.execSQL("insert into Haru_comment values('20160712', 'DATABASE connection check!');");
+        db.execSQL("insert into Haru_comment values('20160710', 'Comment long long line check Hello Hi!!!!! @#$ What are you doing? Comment check!');");
+        //end sample
+
+
         String sql = "select * from Haru_comment";
         Cursor result = db.rawQuery(sql, null);
         result.moveToFirst();
