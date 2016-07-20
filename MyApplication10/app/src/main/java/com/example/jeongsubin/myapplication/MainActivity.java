@@ -3,6 +3,8 @@ package com.example.jeongsubin.myapplication;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
@@ -41,7 +43,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private GoogleMap googleMap;
     Marker current_marker;
     private GestureDetectorCompat gestureDetectorCompat;
-
+    SQLiteDatabase db;
+    String s="";
+    TextView textview;
     public void onMapReady(final GoogleMap map) {
         googleMap = map;
 
@@ -51,7 +55,28 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         final ImageButton commit = new ImageButton(MainActivity.this);
         final ImageButton marker_remover = new ImageButton(MainActivity.this);
         final EditText edit_text = new EditText(MainActivity.this);
+        textview = (TextView) findViewById(R.id.text_id);
+        db = openOrCreateDatabase("Haru", MODE_PRIVATE,null);
+
         current_marker = null;
+
+        try{
+            db.execSQL("create table Haru_comment(date TEXT, comment TEXT);");
+            //db.execSQL("create table Haru_test(date integer, comment integer);");
+        }
+        catch (Exception e){
+        }
+        db.execSQL("insert into Haru_comment values('20160718', '22222');");
+        String sql = "select * from Haru_comment";
+        Cursor result = db.rawQuery(sql, null);
+        result.moveToFirst();
+        while(!result.isAfterLast()){
+            s = s + result.getString(0)+ ' ' + result.getString(1);
+            result.moveToNext();
+        }
+        result.close();
+        textview.setText(s);
+
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
