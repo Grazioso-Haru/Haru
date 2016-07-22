@@ -1,5 +1,6 @@
 package com.example.jeongsubin.myapplication;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -7,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -34,8 +36,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.sql.Date;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 
@@ -45,10 +49,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     Marker current_marker;
     private GestureDetectorCompat gestureDetectorCompat;
     SQLiteDatabase db;
-    String s = "";
+    String current_date = "";
+    String[] commList={};
+    //String s = "";
     TextView textview;
     ListView listview;
-    String[] commList={};
+    TextView text_date;
+    List<Marker> draw_markers = new ArrayList<Marker>();
+    ArrayAdapter<String> adapter;
 
     public void onMapReady(final GoogleMap map) {
         googleMap = map;
@@ -59,46 +67,31 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         final ImageButton commit = new ImageButton(MainActivity.this);
         final ImageButton marker_remover = new ImageButton(MainActivity.this);
         final EditText edit_text = new EditText(MainActivity.this);
-        textview = (TextView) findViewById(R.id.text_id);
+        //textview = (TextView) findViewById(R.id.text_id);
         db = openOrCreateDatabase("Haru", MODE_PRIVATE, null);
 
         current_marker = null;
-        try{
-            db.execSQL("drop table Haru_comment"); //always delete existed Haru_comment table
+        /*try{
+            db.execSQL("drop table Haru_marker"); //always delete existed Haru_comment table
         }
         catch (Exception e){
-            System.out.println("Hello! There is no Haru_comment table.");
+            System.out.println("Hello! There is no Haru_marker table.");
         }
 
         try {
-            db.execSQL("create table Haru_comment(date TEXT, comment TEXT);");//always create a new table named Haru_commnet
+            db.execSQL("create table Haru_marker(date TEXT, id integer, lat double, long double, comment TEXT);");//always create a new table named Haru_commnet
         } catch (Exception e) {
-            System.out.println("Hello! Already Haru_comment table exists.");
-        }
-        //sample DB data
-        db.execSQL("insert into Haru_comment values('20160713', 'Hello');");
-        db.execSQL("insert into Haru_comment values('20160712', 'DATABASE connection check!');");
-        db.execSQL("insert into Haru_comment values('20160710', 'Comment long long line check Hello Hi!!!!! @#$ What are you doing? Comment check!');");
-        //end sample
+            System.out.println("Hello! Already Haru_marker table exists.");
+        }*/
+        /*db.execSQL("insert into Haru_marker values('2016-07-20', 1, 35.999386, -120.053351 ,'kaist3');");
+        db.execSQL("insert into Haru_marker values('2016-07-20', 2, 34.999386, -121.000000 ,'kaist23');");
+        db.execSQL("insert into Haru_marker values('2016-07-20', 3, 33.999386, -122.033351 ,'kaist33');");
+        db.execSQL("insert into Haru_marker values('2016-07-20', 4, 35.999386, -122.033351 ,'kaist33');");
 
+        db.execSQL("insert into Haru_marker values('2016-07-21', 1, 37.999386, -124.053351 ,'kaist44');");
+        db.execSQL("insert into Haru_marker values('2016-07-21', 2, 38.999386, -125.000000 ,'kaist54');");
+        db.execSQL("insert into Haru_marker values('2016-07-21', 3, 32.999386, -126.033351 ,'kaist64');");*/
 
-        String sql = "select * from Haru_comment";
-        Cursor result = db.rawQuery(sql, null);
-        result.moveToFirst();
-        int i=0;
-        for (int j=0;j<50;j++) {
-            if (commList[j]==null)
-                commList[j] = "";
-        }
-        while (!result.isAfterLast()) {
-            s = result.getString(0) + ' ' + result.getString(1);
-            commList[i]=s;
-            i++;
-            result.moveToNext();
-        }
-
-        result.close();
-        //textview.setText(s);
 
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -216,25 +209,25 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         SlidingPaneLayout slidingPaneLayout = (SlidingPaneLayout) findViewById(R.id.SlidingPanel);
         slidingPaneLayout.setSliderFadeColor(ContextCompat.getColor(this, android.R.color.transparent));
 
-        //Setting arrays to see
-        listview = (ListView) findViewById(R.id.comment_list);
         commList= new String[50];
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, commList);
-        listview.setAdapter(adapter);
 
 
         long now = System.currentTimeMillis();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", java.util.Locale.getDefault());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault());
         Date date = new Date(now);
-        String strDate = dateFormat.format(date);
-        TextView text_date = (TextView) findViewById(R.id.date_id);
-        text_date.setText(strDate);
+        current_date = dateFormat.format(date);
+
+        text_date = (TextView) findViewById(R.id.date_id);
+        text_date.setText(current_date);
+
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, commList);
 
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
     }
 
+    @TargetApi(Build.VERSION_CODES.N)
     public void onClick(View view) {
         switch (view.getId()) {
 
@@ -263,14 +256,73 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         .icon(BitmapDescriptorFactory.defaultMarker(r.nextInt(250))));
                 break;
             case R.id.left_btn:
+                googleMap.clear();
+                current_date = date_setting(current_date, -1);
+                text_date.setText(current_date);
                 Toast.makeText(this, "Yesterday", Toast.LENGTH_SHORT).show();
+                mk_marker(current_date);
                 break;
+
             case R.id.right_btn:
+                googleMap.clear();
+                current_date = date_setting(current_date, 1);
+                text_date.setText(current_date);
                 Toast.makeText(this, "Tomorrow", Toast.LENGTH_SHORT).show();
+                mk_marker(current_date);
                 break;
+
+            case R.id.today:
+                googleMap.clear();
+                long now = System.currentTimeMillis();
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault());
+                Date date = new Date(now);
+                current_date = dateFormat.format(date);
+                text_date.setText(current_date);
+                Toast.makeText(this, "Today", Toast.LENGTH_SHORT).show();
+                mk_marker(current_date);
+                break;
+
 
         }
 
 
     }
+    //2016-08-13
+    public String date_setting (String date, int day_ofs){
+        String[] date_parse;
+        date_parse = date.split("-");
+        int day = Integer.parseInt(date_parse[2]) +day_ofs;
+        int month = Integer.parseInt(date_parse[1]);
+        int year = Integer.parseInt(date_parse[0]);
+        return year+"-"+"0"+month+"-"+day;
+    }
+
+    public void mk_marker(String date){
+        for (int j=0;j<50;j++) {
+            commList[j] = "";
+        }
+        listview = (ListView) findViewById(R.id.comment_list);
+        int i =0;
+        String sql = "select * from Haru_marker where date="+"'"+date+"'";
+        Cursor result =  db.rawQuery(sql, null);
+        result.moveToFirst();
+        while (!result.isAfterLast()) {
+            String s = result.getString(0) + '/' + result.getString(1)+'/' + result.getString(2)+'/' + result.getString(3)+ '/' + result.getString(4);
+            Random r = new Random();
+            googleMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(Long.parseLong(String.valueOf(result.getShort(2))), Long.parseLong(String.valueOf(result.getShort(3)))))
+                    .draggable(true)
+                    .title("marker id : "+ result.getString(1))
+                    .snippet(result.getString(4))
+                    .icon(BitmapDescriptorFactory.defaultMarker(r.nextInt(250))));
+            System.out.println(s);
+            listview.setAdapter(adapter);
+            commList[i] = result.getString(4);
+            i++;
+            result.moveToNext();
+        }
+        result.close();
+    }
 }
+
+
