@@ -171,6 +171,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         public void onClick(View view) {
                             Toast.makeText(getApplicationContext(), "You remove the pin", Toast.LENGTH_LONG).show();
                             marker.remove();
+                            String id_str = marker.getTitle().split(" ")[3];
+                            int id = Integer.parseInt(id_str);
+                            db_marker_rm(id, current_date);
                             pin_comment.removeView(edit_text);
                             pin_comment.removeView(commit);
                             pin_comment.removeView(marker_remover);
@@ -318,8 +321,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
     }
-
-    //2016-08-13
+    
     public String date_setting (String date, int day_ofs){
         String[] date_parse;
         date_parse = date.split("-");
@@ -387,6 +389,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             db.execSQL(new_sql);
         }
         result.close();
+    }
+    public void db_marker_rm(int id, String date){
+        String sql = "delete from Haru_marker where id="+id+" and"+" date = '"+date+"'";
+        db.execSQL(sql);
     }
 }
 
