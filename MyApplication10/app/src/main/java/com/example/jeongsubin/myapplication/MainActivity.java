@@ -43,10 +43,12 @@ import java.util.List;
 import java.util.Random;
 
 
-public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerDragListener, GoogleMap.OnMarkerClickListener {
     //LatLng mylocation = new LatLng();
     private GoogleMap googleMap;
     Marker current_marker;
+    double current_marker_lat;
+    double current_marker_long;
     private GestureDetectorCompat gestureDetectorCompat;
     SQLiteDatabase db;
     String current_date = "";
@@ -55,8 +57,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     TextView textview;
     ListView listview;
     TextView text_date;
+    String snippet;
     List<Marker> draw_markers = new ArrayList<Marker>();
     ArrayAdapter<String> adapter;
+
 
     public void onMapReady(final GoogleMap map) {
         googleMap = map;
@@ -95,12 +99,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+
             return;
         }
         googleMap.setMyLocationEnabled(true);
@@ -113,14 +112,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             System.out.println("Subin 12  NULL!!!!!!!!");
         }
 
+
         LatLng mylocation = new LatLng(location.getLatitude(), location.getLongitude());
 
         googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
             @Override
             public View getInfoWindow(Marker marker) {
-
                 return null;
             }
+
 
             @Override
             public View getInfoContents(final Marker marker) {
@@ -153,7 +153,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         @Override
                         public void onClick(View view) {
                             Toast.makeText(getApplicationContext(), "You click the pin", Toast.LENGTH_LONG).show();
-                            marker.setSnippet(String.valueOf(edit_text.getText()));
+                            snippet = String.valueOf(edit_text.getText());
+                            marker.setSnippet(snippet);
+                            String id_str = marker.getTitle().split(" ")[3];
+                            int id = Integer.parseInt(id_str);
+                            db_check(id, current_date);
                             edit_down.setAnimationListener(new AnimationListener());
                             pin_comment.removeView(edit_text);
                             pin_comment.removeView(commit);
@@ -178,9 +182,35 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 return null;
             }
         });
-
+        googleMap.setOnMarkerDragListener(this);
+        googleMap.setOnMarkerClickListener(this);
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(mylocation));
 
+    }
+
+    @Override
+    public void onMarkerDragStart(Marker marker) {
+
+    }
+
+    @Override
+    public void onMarkerDrag(Marker marker) {
+
+    }
+
+    @Override
+    public void onMarkerDragEnd(Marker marker) {
+        System.out.println("Hello hi hihi !!!! : "+  marker.getPosition().latitude + " "+ marker.getPosition().longitude);
+        current_marker_lat = marker.getPosition().latitude;
+        current_marker_long = marker.getPosition().longitude;
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        System.out.println("Hello hi hihi !!!! : "+  marker.getPosition().latitude + " "+ marker.getPosition().longitude);
+        current_marker_lat = marker.getPosition().latitude;
+        current_marker_long = marker.getPosition().longitude;
+        return false;
     }
 
     private final class AnimationListener implements
@@ -201,6 +231,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         }
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -251,7 +282,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 googleMap.addMarker(new MarkerOptions()
                         .position(mylocation)
                         .draggable(true)
-                        .title("You add a pin")
+                        .title("marker id : "+ setmarkerID(current_date))
                         .snippet("What did you do??")
                         .icon(BitmapDescriptorFactory.defaultMarker(r.nextInt(250))));
                 break;
@@ -287,6 +318,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
     }
+
     //2016-08-13
     public String date_setting (String date, int day_ofs){
         String[] date_parse;
@@ -320,6 +352,39 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             commList[i] = result.getString(4);
             i++;
             result.moveToNext();
+        }
+        result.close();
+
+    }
+    public int setmarkerID(String date){
+        String sql = "select * from Haru_marker where date="+"'"+date+"'";
+        Cursor result =  db.rawQuery(sql, null);
+        result.moveToFirst();
+        int i =0;
+        while (!result.isAfterLast()) {
+            i++;
+            result.moveToNext();
+        }
+        result.close();
+        return i+1;
+    }
+    public void db_check(int id, String date){
+        String sql = "select * from Haru_marker where id="+id+" and"+" date = '"+date+"'";
+        Cursor result =  db.rawQuery(sql, null);
+        result.moveToFirst();
+        boolean new_one = true;
+        while (!result.isAfterLast()) {
+            String s = result.getString(0) + '/' + result.getString(1)+'/' + result.getString(2)+'/' + result.getString(3)+ '/' + result.getString(4);
+            String exist_sql = "update Haru_marker set lat="+current_marker_lat+", long="+ current_marker_long + ", comment='" +snippet +"' where id="+id+" and"+" date = '"+date+"'";
+            System.out.println("exist sql: "+ exist_sql);
+            new_one = false;
+            db.execSQL(exist_sql);
+            result.moveToNext();
+        }
+        if(new_one == true){
+            String new_sql = "insert into Haru_marker values( '" + current_date + "' ,"+ setmarkerID(current_date)+","+ current_marker_lat  +","+ current_marker_long + ","+ "'"+snippet+"' );";
+            System.out.println("new sql : "+ new_sql);
+            db.execSQL(new_sql);
         }
         result.close();
     }
