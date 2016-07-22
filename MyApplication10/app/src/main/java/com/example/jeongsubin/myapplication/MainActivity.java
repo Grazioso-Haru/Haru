@@ -38,13 +38,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerDragListener, GoogleMap.OnMarkerClickListener {
-    //LatLng mylocation = new LatLng();
     private GoogleMap googleMap;
     Marker current_marker;
     double current_marker_lat;
@@ -53,12 +50,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     SQLiteDatabase db;
     String current_date = "";
     String[] commList={};
-    //String s = "";
     TextView textview;
     ListView listview;
     TextView text_date;
     String snippet;
-    List<Marker> draw_markers = new ArrayList<Marker>();
     ArrayAdapter<String> adapter;
 
 
@@ -71,11 +66,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         final ImageButton commit = new ImageButton(MainActivity.this);
         final ImageButton marker_remover = new ImageButton(MainActivity.this);
         final EditText edit_text = new EditText(MainActivity.this);
-        //textview = (TextView) findViewById(R.id.text_id);
+
         db = openOrCreateDatabase("Haru", MODE_PRIVATE, null);
 
         current_marker = null;
-        /*try{
+        try{
             db.execSQL("drop table Haru_marker"); //always delete existed Haru_comment table
         }
         catch (Exception e){
@@ -86,16 +81,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             db.execSQL("create table Haru_marker(date TEXT, id integer, lat double, long double, comment TEXT);");//always create a new table named Haru_commnet
         } catch (Exception e) {
             System.out.println("Hello! Already Haru_marker table exists.");
-        }*/
-        /*db.execSQL("insert into Haru_marker values('2016-07-20', 1, 35.999386, -120.053351 ,'kaist3');");
-        db.execSQL("insert into Haru_marker values('2016-07-20', 2, 34.999386, -121.000000 ,'kaist23');");
-        db.execSQL("insert into Haru_marker values('2016-07-20', 3, 33.999386, -122.033351 ,'kaist33');");
-        db.execSQL("insert into Haru_marker values('2016-07-20', 4, 35.999386, -122.033351 ,'kaist33');");
-
-        db.execSQL("insert into Haru_marker values('2016-07-21', 1, 37.999386, -124.053351 ,'kaist44');");
-        db.execSQL("insert into Haru_marker values('2016-07-21', 2, 38.999386, -125.000000 ,'kaist54');");
-        db.execSQL("insert into Haru_marker values('2016-07-21', 3, 32.999386, -126.033351 ,'kaist64');");*/
-
+        }
 
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -109,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         String locationProvider = LocationManager.NETWORK_PROVIDER;
         Location location = locationManager.getLastKnownLocation(locationProvider);
         if (location == null) {
-            System.out.println("Subin 12  NULL!!!!!!!!");
+            System.out.println("Location is null");
         }
 
 
@@ -203,14 +189,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onMarkerDragEnd(Marker marker) {
-        System.out.println("Hello hi hihi !!!! : "+  marker.getPosition().latitude + " "+ marker.getPosition().longitude);
         current_marker_lat = marker.getPosition().latitude;
         current_marker_long = marker.getPosition().longitude;
     }
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        System.out.println("Hello hi hihi !!!! : "+  marker.getPosition().latitude + " "+ marker.getPosition().longitude);
         current_marker_lat = marker.getPosition().latitude;
         current_marker_long = marker.getPosition().longitude;
         return false;
@@ -271,12 +255,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 String provider = service.getBestProvider(criteria, false);
                 if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
                     return;
                 }
                 Location location = service.getLastKnownLocation(provider);
@@ -293,7 +271,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 googleMap.clear();
                 current_date = date_setting(current_date, -1);
                 text_date.setText(current_date);
-                Toast.makeText(this, "Yesterday", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "The day before", Toast.LENGTH_SHORT).show();
                 mk_marker(current_date);
                 break;
 
@@ -301,7 +279,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 googleMap.clear();
                 current_date = date_setting(current_date, 1);
                 text_date.setText(current_date);
-                Toast.makeText(this, "Tomorrow", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "The day after", Toast.LENGTH_SHORT).show();
                 mk_marker(current_date);
                 break;
 
@@ -316,19 +294,40 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 mk_marker(current_date);
                 break;
 
-
         }
 
-
     }
-    
+
     public String date_setting (String date, int day_ofs){
         String[] date_parse;
         date_parse = date.split("-");
         int day = Integer.parseInt(date_parse[2]) +day_ofs;
         int month = Integer.parseInt(date_parse[1]);
         int year = Integer.parseInt(date_parse[0]);
-        return year+"-"+"0"+month+"-"+day;
+        if (day== 0){
+            day=31;
+            month--;
+        }
+        if(day>= 31){
+            month++;
+            day=1;
+        }
+        if(month > 12){
+            year++;
+            month=1;
+        }
+        if (month >9){
+            if (day<10){
+                return year+"-"+month+"-0"+day;
+            }
+            return year+"-"+month+"-"+day;
+        }
+        else {
+            if (day < 10) {
+                return year + "-0" + month + "-0" + day;
+            }
+            return year + "-0" + month + "-" + day;
+        }
     }
 
     public void mk_marker(String date){
@@ -344,7 +343,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             String s = result.getString(0) + '/' + result.getString(1)+'/' + result.getString(2)+'/' + result.getString(3)+ '/' + result.getString(4);
             Random r = new Random();
             googleMap.addMarker(new MarkerOptions()
-                    .position(new LatLng(Long.parseLong(String.valueOf(result.getShort(2))), Long.parseLong(String.valueOf(result.getShort(3)))))
+                    .position(new LatLng(result.getDouble(2), result.getDouble(3)))
                     .draggable(true)
                     .title("marker id : "+ result.getString(1))
                     .snippet(result.getString(4))
