@@ -1,6 +1,7 @@
 package com.example.jeongsubin.myapplication;
 
 import android.annotation.TargetApi;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -35,6 +36,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
@@ -79,9 +81,25 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         try {
             db.execSQL("create table Haru_marker(date TEXT, id integer, lat double, long double, comment TEXT);");//always create a new table named Haru_commnet
+
         } catch (Exception e) {
             System.out.println("Hello! Already Haru_marker table exists.");
         }
+
+        try{
+            db.execSQL("drop table Haru_track"); //always delete existed Haru_comment table
+        }
+        catch (Exception e){
+            System.out.println("Hello! There is no Haru_track table.");
+        }
+
+        try {
+            db.execSQL("create table Haru_track(date TEXT, id integer, lat double, long double, color integer);");
+
+        } catch (Exception e) {
+            System.out.println("Hello! Already Haru_track table exists.");
+        }
+        testInsert();
 
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -273,6 +291,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 text_date.setText(current_date);
                 Toast.makeText(this, "The day before", Toast.LENGTH_SHORT).show();
                 mk_marker(current_date);
+                mk_track(current_date);
                 break;
 
             case R.id.right_btn:
@@ -281,6 +300,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 text_date.setText(current_date);
                 Toast.makeText(this, "The day after", Toast.LENGTH_SHORT).show();
                 mk_marker(current_date);
+                mk_track(current_date);
                 break;
 
             case R.id.today:
@@ -292,6 +312,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 text_date.setText(current_date);
                 Toast.makeText(this, "Today", Toast.LENGTH_SHORT).show();
                 mk_marker(current_date);
+                mk_track(current_date);
                 break;
 
         }
@@ -329,6 +350,99 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             return year + "-0" + month + "-" + day;
         }
     }
+
+    public void mk_track(String date){
+        System.out.println(date);
+        int i =0;
+        //String sql = "select lat, long, color from Haru_track where date = \'" + date + "\' order by id ASC;";
+        String sql = "select * from Haru_track where date = '" + date + "';";
+
+        Cursor result =  db.rawQuery(sql, null);
+        result.moveToFirst();
+
+        double tlat = 0, tlong = 0, slat = 0, slong = 0;
+        int tcolor = 0, scolor = 0;
+        if (result.getCount() != 0) {
+            tlat = result.getDouble(2);
+            tlong = result.getDouble(3);
+            tcolor = result.getInt(4);
+            result.moveToNext();
+        }
+
+        while (!result.isAfterLast()) {
+
+            //date TEXT, id integer, lat double, long double, color integer
+            PolylineOptions line = new PolylineOptions();
+            line.width(10);
+            slat = result.getDouble(2);
+            slong = result.getDouble(3);
+            scolor = result.getInt(4);
+
+            line.add(new LatLng(tlat, tlong), new LatLng(slat, slong));
+            line.color(tcolor);
+            googleMap.addPolyline(line);
+
+            tlat = slat;
+            tlong = slong;
+            tcolor = scolor;
+            result.moveToNext();
+        }
+        result.close();
+
+    }
+
+    public void testInsert() {
+        ContentValues insertValues = new ContentValues();
+        String DATE = "date";
+        String TIME = "id";
+        String LONG = "long";
+        String LAT = "lat";
+        String COLOR = "color";
+
+        insertValues.put(DATE, "2016-07-22");
+        insertValues.put(TIME,003000);
+        insertValues.put(LONG, -122.053248);
+        insertValues.put(LAT, 37.00000);
+        insertValues.put(COLOR,0x810038bd);
+        db.insert("Haru_track", null, insertValues);
+
+        insertValues.put(DATE, "2016-07-22");
+        insertValues.put(TIME,004000);
+        insertValues.put(LONG, -122.054234);
+        insertValues.put(LAT, 36.99543);
+        insertValues.put(COLOR,0xbabf3620);//5
+        db.insert("Haru_track", null, insertValues);
+
+        insertValues.put(DATE, "2016-07-22");
+        insertValues.put(TIME,005000);
+        insertValues.put(LONG, -122.054889);
+        insertValues.put(LAT, 36.998789);
+        insertValues.put(COLOR,0xc8842cbf);//6
+        db.insert("Haru_track", null, insertValues);
+
+        insertValues.put(DATE, "2016-07-22");
+        insertValues.put(TIME,010000);
+        insertValues.put(LONG, -122.055207);
+        insertValues.put(LAT, 36.99822);
+        insertValues.put(COLOR,0x601079be);//7
+        db.insert("Haru_track", null, insertValues);
+
+        insertValues.put(DATE, "2016-07-22");
+        insertValues.put(TIME,011000);
+        insertValues.put(LONG, -122.055291);
+        insertValues.put(LAT, 36.997243);
+        insertValues.put(COLOR,0x4678846b);//8
+        db.insert("Haru_track", null, insertValues);
+
+        insertValues.put(DATE, "2016-07-22");
+        insertValues.put(TIME,012000);
+        insertValues.put(LONG, -122.055239);
+        insertValues.put(LAT, 36.996184);
+        insertValues.put(COLOR,0x80f202a1);//9
+        db.insert("Haru_track", null, insertValues);
+
+    }
+
 
     public void mk_marker(String date){
         for (int j=0;j<50;j++) {
