@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
@@ -36,6 +37,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.sql.Date;
@@ -52,7 +54,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     SQLiteDatabase db;
     String current_date = "";
     String[] commList={};
-    TextView textview;
     ListView listview;
     TextView text_date;
     String snippet;
@@ -61,7 +62,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public void onMapReady(final GoogleMap map) {
         googleMap = map;
-
+        db = openOrCreateDatabase("Haru", MODE_PRIVATE, null);
+        current_marker = null;
         final Animation edit_up = AnimationUtils.loadAnimation(MainActivity.this, R.anim.drop_down);
         final Animation edit_down = AnimationUtils.loadAnimation(MainActivity.this, R.anim.rise_up);
         final LinearLayout pin_comment = (LinearLayout) findViewById(R.id.pin_comment);
@@ -69,9 +71,17 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         final ImageButton marker_remover = new ImageButton(MainActivity.this);
         final EditText edit_text = new EditText(MainActivity.this);
 
-        db = openOrCreateDatabase("Haru", MODE_PRIVATE, null);
+        Polyline line = googleMap.addPolyline(new PolylineOptions()
+                .add(
+                        new LatLng(36.981015, -121.981060),
+                        new LatLng(36.985938, -121.987459),
+                        new LatLng(36.986314, -121.963903),
+                        new LatLng(36.968270, -121.964390),
+                        new LatLng(36.976152, -121.987431)
+                        )
+                .width(20)
+                .color(Color.BLUE));
 
-        current_marker = null;
         try{
             db.execSQL("drop table Haru_marker"); //always delete existed Haru_comment table
         }
@@ -99,36 +109,32 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         } catch (Exception e) {
             System.out.println("Hello! Already Haru_track table exists.");
         }
-        testInsert();
 
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
+        //testInsert();
 
-            return;
-        }
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {return;}
+
         googleMap.setMyLocationEnabled(true);
 
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         String locationProvider = LocationManager.NETWORK_PROVIDER;
+
         Location location = locationManager.getLastKnownLocation(locationProvider);
+
         if (location == null) {
             System.out.println("Location is null");
         }
-
 
         LatLng mylocation = new LatLng(location.getLatitude(), location.getLongitude());
 
         googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
             @Override
-            public View getInfoWindow(Marker marker) {
-                return null;
-            }
-
+            public View getInfoWindow(Marker marker) {return null;}
 
             @Override
             public View getInfoContents(final Marker marker) {
-                Toast.makeText(MainActivity.this, "comment", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Pin Selected", Toast.LENGTH_SHORT).show();
                 edit_text.setId(R.id.edit_text);
                 if (marker != current_marker && current_marker != null) {
                     edit_down.setAnimationListener(new AnimationListener());
@@ -140,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 if (pin_comment.findViewById(R.id.edit_text) == null) {
                     current_marker = marker;
                     edit_text.setLayoutParams(new ViewGroup.LayoutParams(520, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    edit_text.setHint("your comment");
+                    edit_text.setHint("Comment Here:");
                     edit_text.setText(marker.getSnippet());
                     commit.setBackgroundResource(R.drawable.commit);
                     commit.setLayoutParams(new ViewGroup.LayoutParams(50, 50));
@@ -156,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     commit.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Toast.makeText(getApplicationContext(), "You click the pin", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "Pin Has Been Updated", Toast.LENGTH_LONG).show();
                             snippet = String.valueOf(edit_text.getText());
                             marker.setSnippet(snippet);
                             String id_str = marker.getTitle().split(" ")[3];
@@ -173,11 +179,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     marker_remover.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Toast.makeText(getApplicationContext(), "You remove the pin", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "Pin Has Been Deleted", Toast.LENGTH_LONG).show();
                             marker.remove();
                             String id_str = marker.getTitle().split(" ")[3];
                             int id = Integer.parseInt(id_str);
-                            db_marker_rm(id, current_date);
+                            db_check(id, current_date);
                             pin_comment.removeView(edit_text);
                             pin_comment.removeView(commit);
                             pin_comment.removeView(marker_remover);
@@ -257,9 +263,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         text_date.setText(current_date);
 
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, commList);
-
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+
 
     }
 
@@ -281,30 +288,96 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 googleMap.addMarker(new MarkerOptions()
                         .position(mylocation)
                         .draggable(true)
-                        .title("marker id : "+ setmarkerID(current_date))
-                        .snippet("What did you do??")
+                        .title("Marker ID : "+ setmarkerID(current_date))
                         .icon(BitmapDescriptorFactory.defaultMarker(r.nextInt(250))));
                 break;
             case R.id.left_btn:
                 googleMap.clear();
                 current_date = date_setting(current_date, -1);
                 text_date.setText(current_date);
-                Toast.makeText(this, "The day before", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Yesterday", Toast.LENGTH_SHORT).show();
                 mk_marker(current_date);
                 mk_track(current_date);
+
+                Polyline line = googleMap.addPolyline(new PolylineOptions()
+                        .add(
+                                new LatLng(36.976152, -121.987431),
+                                new LatLng(36.987648, -121.990780),
+                                new LatLng(36.977498, -122.049597),
+                                new LatLng(36.991131, -122.053751),
+                                new LatLng(37.000266, -122.063509),
+                                new LatLng(36.961498, -122.044255),
+                                new LatLng(36.968270, -121.964390),
+                                new LatLng(36.962388, -121.998209),
+                                new LatLng(36.981015, -121.981060)
+                        )
+                        .width(20)
+                        .color(Color.GREEN));
+
+                Random ra = new Random();
+                googleMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(36.981015, -121.981060))
+                        .draggable(true)
+                        .title("2016-07-24 11:17pm")
+                        .snippet("Went to Jeff's Place")
+                        .icon(BitmapDescriptorFactory.defaultMarker(ra.nextInt(250))));
+                googleMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(36.962388, -121.998209))
+                        .draggable(true)
+                        .title("2016-07-24 7:06pm")
+                        .snippet("Beach Time!!!")
+                        .icon(BitmapDescriptorFactory.defaultMarker(ra.nextInt(250))));
+                googleMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(36.968270, -121.964390))
+                        .draggable(true)
+                        .title("2016-07-24 4:47pm")
+                        .snippet("Gym/Workout Routine")
+                        .icon(BitmapDescriptorFactory.defaultMarker(ra.nextInt(250))));
+                googleMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(36.961498, -122.044255))
+                        .draggable(true)
+                        .title("2016-07-24 1:36pm")
+                        .snippet("???")
+                        .icon(BitmapDescriptorFactory.defaultMarker(ra.nextInt(250))));
+                googleMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(37.000266, -122.063509))
+                        .draggable(true)
+                        .title("2016-07-24 12:21pm")
+                        .snippet("SCRUM Meeting w/ Group")
+                        .icon(BitmapDescriptorFactory.defaultMarker(ra.nextInt(250))));
                 break;
 
             case R.id.right_btn:
                 googleMap.clear();
+
+
+
+
                 current_date = date_setting(current_date, 1);
                 text_date.setText(current_date);
-                Toast.makeText(this, "The day after", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Today", Toast.LENGTH_SHORT).show();
                 mk_marker(current_date);
                 mk_track(current_date);
+
+                Polyline newline = googleMap.addPolyline(new PolylineOptions()
+                        .add(
+                                new LatLng(36.981015, -121.981060),
+                                new LatLng(36.985938, -121.987459),
+                                new LatLng(36.986314, -121.963903),
+                                new LatLng(36.968270, -121.964390),
+                                new LatLng(36.976152, -121.987431)
+                        )
+                        .width(20)
+                        .color(Color.BLUE));
+
+
+
+
+
                 break;
 
             case R.id.today:
-                googleMap.clear();
+
                 long now = System.currentTimeMillis();
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault());
                 Date date = new Date(now);
