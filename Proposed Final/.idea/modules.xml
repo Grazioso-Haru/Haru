@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Haru-Final.iml" filepath="$PROJECT_DIR$/Haru-Final.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MyApplication10.iml" filepath="$PROJECT_DIR$/MyApplication10.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

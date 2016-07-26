@@ -1,22 +1,29 @@
 package com.example.jeongsubin.myapplication;
 
 import android.annotation.TargetApi;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.widget.SlidingPaneLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -37,8 +44,9 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+
+import com.example.jeongsubin.myapplication.TrackData.LocalBinder;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
@@ -54,16 +62,19 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     SQLiteDatabase db;
     String current_date = "";
     String[] commList={};
+    TextView textview;
     ListView listview;
     TextView text_date;
     String snippet;
     ArrayAdapter<String> adapter;
+    TrackData mService;
+    boolean mBound = false;
+
 
 
     public void onMapReady(final GoogleMap map) {
         googleMap = map;
-        db = openOrCreateDatabase("Haru", MODE_PRIVATE, null);
-        current_marker = null;
+
         final Animation edit_up = AnimationUtils.loadAnimation(MainActivity.this, R.anim.drop_down);
         final Animation edit_down = AnimationUtils.loadAnimation(MainActivity.this, R.anim.rise_up);
         final LinearLayout pin_comment = (LinearLayout) findViewById(R.id.pin_comment);
@@ -71,17 +82,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         final ImageButton marker_remover = new ImageButton(MainActivity.this);
         final EditText edit_text = new EditText(MainActivity.this);
 
-        Polyline line = googleMap.addPolyline(new PolylineOptions()
-                .add(
-                        new LatLng(36.981015, -121.981060),
-                        new LatLng(36.985938, -121.987459),
-                        new LatLng(36.986314, -121.963903),
-                        new LatLng(36.968270, -121.964390),
-                        new LatLng(36.976152, -121.987431)
-                        )
-                .width(20)
-                .color(Color.BLUE));
+        db = openOrCreateDatabase("Haru", MODE_PRIVATE, null);
 
+        current_marker = null;
         try{
             db.execSQL("drop table Haru_marker"); //always delete existed Haru_comment table
         }
@@ -109,28 +112,33 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         } catch (Exception e) {
             System.out.println("Hello! Already Haru_track table exists.");
         }
-
         //testInsert();
 
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {return;}
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
 
+            return;
+        }
         googleMap.setMyLocationEnabled(true);
 
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+        String provider = locationManager.getBestProvider(criteria, false);
 
-        String locationProvider = LocationManager.NETWORK_PROVIDER;
-
-        Location location = locationManager.getLastKnownLocation(locationProvider);
-
+        Location location = locationManager.getLastKnownLocation(provider);
         if (location == null) {
             System.out.println("Location is null");
         }
+
 
         LatLng mylocation = new LatLng(location.getLatitude(), location.getLongitude());
 
         googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
             @Override
-            public View getInfoWindow(Marker marker) {return null;}
+            public View getInfoWindow(Marker marker) {
+                return null;
+            }
+
 
             @Override
             public View getInfoContents(final Marker marker) {
@@ -183,7 +191,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             marker.remove();
                             String id_str = marker.getTitle().split(" ")[3];
                             int id = Integer.parseInt(id_str);
-                            db_check(id, current_date);
+                            db_marker_rm(id, current_date);
                             pin_comment.removeView(edit_text);
                             pin_comment.removeView(commit);
                             pin_comment.removeView(marker_remover);
@@ -263,10 +271,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         text_date.setText(current_date);
 
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, commList);
+
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-
 
     }
 
@@ -288,96 +295,29 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 googleMap.addMarker(new MarkerOptions()
                         .position(mylocation)
                         .draggable(true)
-                        .title("Marker ID : "+ setmarkerID(current_date))
+                        .title("Marker ID: "+ setmarkerID(current_date))
                         .icon(BitmapDescriptorFactory.defaultMarker(r.nextInt(250))));
                 break;
             case R.id.left_btn:
                 googleMap.clear();
                 current_date = date_setting(current_date, -1);
                 text_date.setText(current_date);
-                Toast.makeText(this, "Yesterday", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Day Before", Toast.LENGTH_SHORT).show();
                 mk_marker(current_date);
                 mk_track(current_date);
-
-                Polyline line = googleMap.addPolyline(new PolylineOptions()
-                        .add(
-                                new LatLng(36.976152, -121.987431),
-                                new LatLng(36.987648, -121.990780),
-                                new LatLng(36.977498, -122.049597),
-                                new LatLng(36.991131, -122.053751),
-                                new LatLng(37.000266, -122.063509),
-                                new LatLng(36.961498, -122.044255),
-                                new LatLng(36.968270, -121.964390),
-                                new LatLng(36.962388, -121.998209),
-                                new LatLng(36.981015, -121.981060)
-                        )
-                        .width(20)
-                        .color(Color.GREEN));
-
-                Random ra = new Random();
-                googleMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(36.981015, -121.981060))
-                        .draggable(true)
-                        .title("2016-07-24 11:17pm")
-                        .snippet("Went to Jeff's Place")
-                        .icon(BitmapDescriptorFactory.defaultMarker(ra.nextInt(250))));
-                googleMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(36.962388, -121.998209))
-                        .draggable(true)
-                        .title("2016-07-24 7:06pm")
-                        .snippet("Beach Time!!!")
-                        .icon(BitmapDescriptorFactory.defaultMarker(ra.nextInt(250))));
-                googleMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(36.968270, -121.964390))
-                        .draggable(true)
-                        .title("2016-07-24 4:47pm")
-                        .snippet("Gym/Workout Routine")
-                        .icon(BitmapDescriptorFactory.defaultMarker(ra.nextInt(250))));
-                googleMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(36.961498, -122.044255))
-                        .draggable(true)
-                        .title("2016-07-24 1:36pm")
-                        .snippet("???")
-                        .icon(BitmapDescriptorFactory.defaultMarker(ra.nextInt(250))));
-                googleMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(37.000266, -122.063509))
-                        .draggable(true)
-                        .title("2016-07-24 12:21pm")
-                        .snippet("SCRUM Meeting w/ Group")
-                        .icon(BitmapDescriptorFactory.defaultMarker(ra.nextInt(250))));
                 break;
 
             case R.id.right_btn:
                 googleMap.clear();
-
-
-
-
                 current_date = date_setting(current_date, 1);
                 text_date.setText(current_date);
-                Toast.makeText(this, "Today", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Day After", Toast.LENGTH_SHORT).show();
                 mk_marker(current_date);
                 mk_track(current_date);
-
-                Polyline newline = googleMap.addPolyline(new PolylineOptions()
-                        .add(
-                                new LatLng(36.981015, -121.981060),
-                                new LatLng(36.985938, -121.987459),
-                                new LatLng(36.986314, -121.963903),
-                                new LatLng(36.968270, -121.964390),
-                                new LatLng(36.976152, -121.987431)
-                        )
-                        .width(20)
-                        .color(Color.BLUE));
-
-
-
-
-
                 break;
 
             case R.id.today:
-
+                googleMap.clear();
                 long now = System.currentTimeMillis();
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault());
                 Date date = new Date(now);
@@ -464,6 +404,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
+
+/*
     public void testInsert() {
         ContentValues insertValues = new ContentValues();
         String DATE = "date";
@@ -516,7 +458,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
-
+*/
     public void mk_marker(String date){
         for (int j=0;j<50;j++) {
             commList[j] = "";
@@ -579,6 +521,93 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void db_marker_rm(int id, String date){
         String sql = "delete from Haru_marker where id="+id+" and"+" date = '"+date+"'";
         db.execSQL(sql);
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // Bind to TrackData
+        Intent intent = new Intent(this, TrackData.class);
+        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+    }
+    @Override
+    protected void onStop(){
+        super.onStop();
+        if (mBound){
+            unbindService(mConnection);
+            mBound = false;
+        }
+    }
+
+    private ServiceConnection mConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder service) {
+            LocalBinder binder = (LocalBinder) service;
+            mService = binder.getService();
+            mBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            mBound = false;
+        }
+    };
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // Register mMessageReceiver to receive messages.
+        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
+                new IntentFilter("database-update"));
+    }
+
+    // handler for received Intents for the "database-update" event
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // Extract data included in the Intent
+            String lat = intent.getStringExtra("lat");
+            String lon = intent.getStringExtra("lon");
+            String timefordata = intent.getStringExtra("time");
+            int color = intent.getIntExtra("color", 0xffffffff);
+
+            //int color = 0x810038bd;
+            //String lon = extras.getString("lon");
+            //String timefordata = extras.getString("time");
+            insertData(current_date,timefordata,lon,lat,color);
+            //Log.d("receiver", "Got message: " + message);
+            Log.d("receiver", "Got message: " +lat);
+            Log.d("reciever", "Got message: lat="+lat+"   lon="+lon+"  time="+timefordata+"  color="+Integer.toString(color));
+        }
+    };
+
+
+    @Override
+    protected void onPause() {
+        // Unregister since the activity is not visible
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
+        super.onPause();
+    }
+
+    public void insertData(String date, String time, String lon, String lat, int color){
+        ContentValues insertValues = new ContentValues();
+        String DATE = "date";
+        String TIME = "id";
+        String LONG = "long";
+        String LAT = "lat";
+        String COLOR = "color";
+
+        double dlat = Double.parseDouble(lat);
+        double dlon = Double.parseDouble(lon);
+        Long dtime = Long.parseLong(time);
+
+
+
+        insertValues.put(DATE, date);
+        insertValues.put(TIME, dtime);
+        insertValues.put(LONG, dlon);
+        insertValues.put(LAT, dlat);
+        insertValues.put(COLOR, color);
+        db.insert("Haru_track", null, insertValues);
     }
 }
 

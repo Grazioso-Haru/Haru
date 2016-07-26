@@ -67,8 +67,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#22b5ff"
-            android:text=""
             android:textSize="18dp"
+            android:text=""
             />
 
         <RelativeLayout
@@ -88,7 +88,7 @@
             android:layout_marginTop="3dp" />
         <LinearLayout
             android:id="@+id/pin_comment"
-            android:layout_width="600dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_alignParentLeft="true"
@@ -105,5 +105,6 @@
             android:layout_height="412dp"
             android:onClick="onClick"
             class="com.google.android.gms.maps.MapFragment"/>
+
     </LinearLayout>
 </android.support.v4.widget.SlidingPaneLayout>
