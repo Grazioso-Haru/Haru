@@ -538,11 +538,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             mBound = false;
         }
     }
-    public void onButtonClick(View v) {
-        if (mBound){
-            // TODO Call A method from the track data (Sync the data)
-        }
-    }
 
     private ServiceConnection mConnection = new ServiceConnection() {
         @Override
