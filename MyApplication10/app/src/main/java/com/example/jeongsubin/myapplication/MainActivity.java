@@ -1,8 +1,13 @@
 package com.example.jeongsubin.myapplication;
 
 import android.annotation.TargetApi;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -11,11 +16,14 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.widget.SlidingPaneLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -38,6 +46,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import com.example.jeongsubin.myapplication.TrackData.LocalBinder;
+
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.Random;
@@ -57,6 +67,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     TextView text_date;
     String snippet;
     ArrayAdapter<String> adapter;
+    TrackData mService;
+    boolean mBound = false;
+
 
 
     public void onMapReady(final GoogleMap map) {
@@ -99,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         } catch (Exception e) {
             System.out.println("Hello! Already Haru_track table exists.");
         }
-        testInsert();
+        //testInsert();
 
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -109,9 +122,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         googleMap.setMyLocationEnabled(true);
 
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+        String provider = locationManager.getBestProvider(criteria, false);
 
-        String locationProvider = LocationManager.NETWORK_PROVIDER;
-        Location location = locationManager.getLastKnownLocation(locationProvider);
+        Location location = locationManager.getLastKnownLocation(provider);
         if (location == null) {
             System.out.println("Location is null");
         }
@@ -391,6 +405,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
+
+/*
     public void testInsert() {
         ContentValues insertValues = new ContentValues();
         String DATE = "date";
@@ -443,7 +459,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
-
+*/
     public void mk_marker(String date){
         for (int j=0;j<50;j++) {
             commList[j] = "";
@@ -506,6 +522,93 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void db_marker_rm(int id, String date){
         String sql = "delete from Haru_marker where id="+id+" and"+" date = '"+date+"'";
         db.execSQL(sql);
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // Bind to TrackData
+        Intent intent = new Intent(this, TrackData.class);
+        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+    }
+    @Override
+    protected void onStop(){
+        super.onStop();
+        if (mBound){
+            unbindService(mConnection);
+            mBound = false;
+        }
+    }
+
+    private ServiceConnection mConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder service) {
+            LocalBinder binder = (LocalBinder) service;
+            mService = binder.getService();
+            mBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            mBound = false;
+        }
+    };
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // Register mMessageReceiver to receive messages.
+        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
+                new IntentFilter("database-update"));
+    }
+
+    // handler for received Intents for the "database-update" event
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // Extract data included in the Intent
+            String lat = intent.getStringExtra("lat");
+            String lon = intent.getStringExtra("lon");
+            String timefordata = intent.getStringExtra("time");
+            int color = intent.getIntExtra("color", 0xffffffff);
+
+            //int color = 0x810038bd;
+            //String lon = extras.getString("lon");
+            //String timefordata = extras.getString("time");
+            insertData(current_date,timefordata,lon,lat,color);
+            //Log.d("receiver", "Got message: " + message);
+            Log.d("receiver", "Got message: " +lat);
+            Log.d("reciever", "Got message: lat="+lat+"   lon="+lon+"  time="+timefordata+"  color="+Integer.toString(color));
+        }
+    };
+
+
+    @Override
+    protected void onPause() {
+        // Unregister since the activity is not visible
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
+        super.onPause();
+    }
+
+    public void insertData(String date, String time, String lon, String lat, int color){
+        ContentValues insertValues = new ContentValues();
+        String DATE = "date";
+        String TIME = "id";
+        String LONG = "long";
+        String LAT = "lat";
+        String COLOR = "color";
+
+        double dlat = Double.parseDouble(lat);
+        double dlon = Double.parseDouble(lon);
+        Long dtime = Long.parseLong(time);
+
+
+
+        insertValues.put(DATE, date);
+        insertValues.put(TIME, dtime);
+        insertValues.put(LONG, dlon);
+        insertValues.put(LAT, dlat);
+        insertValues.put(COLOR, color);
+        db.insert("Haru_track", null, insertValues);
     }
 }
 

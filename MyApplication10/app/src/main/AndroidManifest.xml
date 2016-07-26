@@ -40,7 +40,16 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCcZsHlV8bP41S4becdLivuSny0r2LhDkI" />
-
+        <service
+            android:name=".TrackData"
+            android:description="@string/track_data_desc"
+            android:enabled="true"
+            android:exported="true"
+            android:label="@string/service_name" >
+            <intent-filter>
+                <action android:name="com.timotongo.alwaysrunninggps.LONGRUNSERVICE" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
