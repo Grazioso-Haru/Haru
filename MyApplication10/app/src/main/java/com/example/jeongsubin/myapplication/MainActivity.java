@@ -36,6 +36,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.jeongsubin.myapplication.TrackData.LocalBinder;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -45,8 +46,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
-
-import com.example.jeongsubin.myapplication.TrackData.LocalBinder;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
@@ -85,12 +84,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         db = openOrCreateDatabase("Haru", MODE_PRIVATE, null);
 
         current_marker = null;
-        try{
+        /*try{
             db.execSQL("drop table Haru_marker"); //always delete existed Haru_comment table
         }
         catch (Exception e){
             System.out.println("Hello! There is no Haru_marker table.");
-        }
+        }*/
 
         try {
             db.execSQL("create table Haru_marker(date TEXT, id integer, lat double, long double, comment TEXT);");//always create a new table named Haru_commnet
@@ -99,12 +98,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             System.out.println("Hello! Already Haru_marker table exists.");
         }
 
-        try{
+        /*try{
             db.execSQL("drop table Haru_track"); //always delete existed Haru_comment table
         }
         catch (Exception e){
             System.out.println("Hello! There is no Haru_track table.");
-        }
+        }*/
 
         try {
             db.execSQL("create table Haru_track(date TEXT, id integer, lat double, long double, color integer);");
@@ -153,13 +152,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
                 if (pin_comment.findViewById(R.id.edit_text) == null) {
                     current_marker = marker;
-                    edit_text.setLayoutParams(new ViewGroup.LayoutParams(520, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    edit_text.setLayoutParams(new ViewGroup.LayoutParams(800, ViewGroup.LayoutParams.WRAP_CONTENT));
                     edit_text.setHint("your comment");
                     edit_text.setText(marker.getSnippet());
                     commit.setBackgroundResource(R.drawable.commit);
-                    commit.setLayoutParams(new ViewGroup.LayoutParams(50, 50));
+                    commit.setLayoutParams(new ViewGroup.LayoutParams(70, 70));
                     marker_remover.setBackgroundResource(R.drawable.remove);
-                    marker_remover.setLayoutParams(new ViewGroup.LayoutParams(50, 50));
+                    marker_remover.setLayoutParams(new ViewGroup.LayoutParams(70, 70));
 
                     pin_comment.addView(edit_text);
                     pin_comment.addView(commit);
@@ -176,11 +175,17 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             String id_str = marker.getTitle().split(" ")[3];
                             int id = Integer.parseInt(id_str);
                             db_check(id, current_date);
+                            ///
+                            googleMap.clear();
+                            mk_marker(current_date);
+                            mk_track(current_date);
+                            ///
                             edit_down.setAnimationListener(new AnimationListener());
                             pin_comment.removeView(edit_text);
                             pin_comment.removeView(commit);
                             pin_comment.removeView(marker_remover);
                             pin_comment.startAnimation(edit_down);
+
                             current_marker = null;
                         }
                     });

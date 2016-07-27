@@ -67,7 +67,7 @@ public class TrackData extends Service implements LocationListener {
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 36000000, 3, this);
+        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 36000000, 13, this);
         //value is changed to debug 1check/10hour 3m
 
     }
